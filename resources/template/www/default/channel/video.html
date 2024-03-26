@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线视频</title>
+    <link rel="stylesheet" th:href="${ctx}+'/css/swiper-3.4.2.min.css'">
+    <link rel="stylesheet" th:href="${ctx}+'/css/video.css'">
+</head>
+<body>
+<th:block th:include="${res}+'/includes/header'" />
+<div class="content">
+    <div class="video-container">
+        <h2>全部视频</h2>
+         <th:block th:with="p=${cms.getContentPage('channelId:' + channel.channelId + ',siteId:'+site.id+',pageNo:'+page+',count:8,order:2')}">
+        <div class="video-list">
+            <div class="video-item" th:each="no : ${p.rows}">
+                <div class="video-img" th:onclick="location.href='[(${no.url})]'">
+                    <img th:src="${no.cover}" />
+                </div>
+                <div class="video-content">
+                    <p th:onclick="location.href='[(${no.url})]'">[[${no.title}]]</p>
+                    <p>
+                        <span>[[${#dates.format(no.releaseTime, 'yyyy-MM-dd')}]]</span>
+                        <span class="views"><img th:src="${ctx}+'/img/index/eye.svg'" /><span>[[${no.views}]]</span></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+            <th:block th:include="${res}+'/includes/page'" />
+        </th:block>
+    </div>
+</div>
+<th:block th:include="${res}+'/includes/footer'" />
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/swiper-3.4.2.min.js'"></script>
+
+</body>
+</html>

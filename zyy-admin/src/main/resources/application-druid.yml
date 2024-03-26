@@ -1,0 +1,79 @@
+# 数据源配置
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        druid:
+            # 主库数据源
+            master:
+                url: jdbc:mysql://ip:3386/zyycms?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&queryTimeout=2400&nullCatalogMeansCurrent=true
+                username: root
+                #password: root
+                password:
+            # 从库数据源
+            slave:
+                # 从数据源开关/默认关闭
+                enabled: false
+                url:
+                username:
+                password:
+            # 初始连接数
+            initialSize: 5
+            # 最小连接池数量
+            minIdle: 10
+            # 最大连接池数量
+            maxActive: 20
+            # 配置获取连接等待超时的时间
+            maxWait: 60000
+            # 配置连接超时时间
+            connectTimeout: 30000
+            # 配置网络超时时间
+            socketTimeout: 60000
+            # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+            timeBetweenEvictionRunsMillis: 60000
+            # 配置一个连接在池中最小生存的时间，单位是毫秒
+            minEvictableIdleTimeMillis: 300000
+            # 配置一个连接在池中最大生存的时间，单位是毫秒
+            maxEvictableIdleTimeMillis: 900000
+            # 配置检测连接是否有效
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            webStatFilter:
+                enabled: true
+            statViewServlet:
+                enabled: true
+                # 设置白名单，不填则允许所有访问
+                allow:
+                url-pattern: /druid/*
+                # 控制台管理用户名和密码
+                login-username: hnzyy
+                login-password: Hnzyy@61661688,.
+            filter:
+                config:
+                    # 是否配置加密
+                    enabled: false
+                    # 开启加密，数据库连接密码加密，正式环境key从命令行输入
+                    key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJIm9hS+smsCf9uOzwgSC8AZHvMlXursDNpjHhTxsXyXjFCp1BUdjAG9R6dx1uONKOrBaSo4K1lHnybkoYt3W6UCAwEAAQ==
+                stat:
+                    enabled: true
+                    # 慢SQL记录
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+#阿里沙箱支付配置
+alipay:
+    #签名算法
+    signType:
+    #应用ID
+    appId: 9021000122685989
+    #应用私钥
+    appPrivateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCXYnLKGj5cJW9b7H25cob35C2HLWSmcOMm1er1f7iFr6eeFW3m/lmYQTwwVBiubKX4dSBaHRhF57pa9eEyCobSm+bRNx3A0W7KPQCSLCwbIIB7CXShYrJ/FpirOT0cVce58+Lg9VO4Vsr8NpxpQZGcxsyORIMjj+v6EyMg4mhCnyu+W3U/IctjfjFoTSMN3Ry7ShJUpb0bY8tABDikEComiwF+UtjVnA8+rtDDMnBFgU8eMZHXJWL7SW0WZvjq9eFl0V/i7IfaeS7aCbtAMyRiVPPdii7S9x+ziCzvJVGm19a0c27uWiinEJp1cew5LWGQnlxHkMIR4GGXD6j9m7otAgMBAAECggEATAtnMEC4nJ8tblbA3Rw70mBrwmC6E6XXZVXF/maXMYiIQa/wEj4okYQLkRddgpkPUly70KiW3d7GzRSAeBuzmC46Z1QxfP93kN3N4J+R1FqiT6vzS3KBybd3H2PUX9xzROTPTkPON2ZZ9xITxgfq9n8imECwQ3fziR594fH5f6UhU05/SvHhOHrY+UlYmSyPX6lMu2hv/ALfoFC0gkHpql2lnc0TiW73a6JccV3KXdAWvMWgy1UGQd4HPXExNiDZq+GHWKqsGEE5+kGLVjRud9kME9ehLG1IqOIT8iEwGVy0nUUWqcHAZicKsMLPvGjrZ6yKl+LaBpMiugd6nHaaAQKBgQDPA6EB+cEpuOiAgHK2yqb4AafY0UulW+5MlQb/6CmNyQSP1W8NdbYDSQ8LliO52wdxea0LCNqn3khHVcs78oQ7gqopbMQGnZeUsdca/XiAWWYMdhRqTPr7Gj/8/9+90DMnAFesEEmrd/mJQMNKB6iB4QSETYDCvGgF8C9+YVg/gQKBgQC7NOy99TgZyEoMajP5c2g3xmuYBvZwFPmPiHPXTHD/GvFn17psJrNox3le69Q237jPTe9KDvvEUjb5Muw7cp97gFroN0ubwVSkLz8oGN0lcbCn9YSM0nPTXguEy2wpQu+iKlcIJ43REQQiJtIysFvy+VvJnl61bPX061fqMWDQrQKBgQCZziRuB1YQ3aVA9C5GyUJMuU4vtTDy5t6iX4cX0zIsedG92+Hqqi5VOo7HGQHqMGXTVYfPzwBGAMzK019wZrsATBCJPppWH/hjLc6X6wMAuWssjv6UDCXdMp+gJavipzGaJJL+8AsMLtNjuo5eDlqQRNLKSZsFFF5lKxLeXwzmAQKBgBmzMVD+qh33/hpoNgxnyIXnqnurcQeACaanv+dtqhGLfFqaJhCU24pl4Aak73Q9EFz9QP10wyF3e+6IDCA5IyXMQC6i8LFIQDtt9QinKSzrx6m3LeQ7PAVnYsNvPcEIXGdx0pLfAzwRTvT1SWQGDAl2LCCoqi3T8IwYBvCyqKzdAoGBAK9nVvymIrDvJ9vo8O5dr30qnosEY/onhIv9jzYiteeEebtYSFpTfgn/SHkWhHHNwkq7dc2iv4GF323WbXvyxBwrFIpitmkkrRfOt5jsdwbvLe7pWqIlq58Mgq20DklkJs0i2+A4CyOQ0TcNBbw1j8BnPLx0Lqa1EMGcjylytqjo
+    #支付宝公钥
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgu78bAPx4x6VLv8YTQ1vPcSFo4RAQs+9aB7oPxF3rpNaww/Y2+QGlnxKnsWGKrIHLa5rzan8g+usrhVJKG3WCJ4f8AtqIsNRYFqLi9X2hqz9l9Z75CNckMTlE0/V/kqFdOxypcj3ifqmMLqrLVIotwDAep4ZJDAnGcO80sU9x1YiFNrBO/U8rJ+SxCLKV/87zJH0GinnBce2IWNz7uYzL5EvCtvnlx8fBmTkRtdaQIQY1eK42y+jedC52PMVqjmXOGNRbzgv2D/e6SLV3x7U2ufHOaeW8QN+ebWIxQLNLz4z5cEEq7bugO/I83ECJR2rcH1NbM3+HESSTJedjALHGQIDAQAB
+    #回调地址
+    notifyUrl: https://zdxyh.hnzyy.ltd:888/web/donate/notify

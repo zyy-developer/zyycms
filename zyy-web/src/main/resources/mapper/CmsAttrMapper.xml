@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsAttrMapper">
+
+    <resultMap type="CmsAttr" id="CmsAttrResult">
+        <result property="id"    column="id"    />
+        <result property="attrName"    column="attr_name"    />
+        <result property="attrValue"    column="attr_value"    />
+        <result property="contentId"    column="content_id"    />
+        <result property="channelId" column="channel_id" />
+    </resultMap>
+
+    <sql id="selectCmsAttrVo">
+        select id, attr_name, attr_value, content_id,channel_id from cms_attr
+    </sql>
+
+    <select id="selectCmsAttrList" parameterType="CmsAttr" resultMap="CmsAttrResult">
+        <include refid="selectCmsAttrVo"/>
+        <where>
+            <if test="attrName != null  and attrName != ''"> and attr_name like concat('%', #{attrName}, '%')</if>
+            <if test="attrValue != null  and attrValue != ''"> and attr_value = #{attrValue}</if>
+            <if test="contentId != null "> and content_id = #{contentId}</if>
+            <if test="channelId !=null "> and channel_id = #{channelId}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsAttrListByIds" parameterType="java.util.List" resultMap="CmsAttrResult">
+        <include refid="selectCmsAttrVo"/>
+        <where>
+            content_id IN
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item.id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectCmsAttrListByChannelIds" parameterType="java.util.List" resultMap="CmsAttrResult">
+        <include refid="selectCmsAttrVo"/>
+        <where>
+            channel_id IN
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item.channelId}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectCmsAttrById" parameterType="Long" resultMap="CmsAttrResult">
+        <include refid="selectCmsAttrVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsAttr" parameterType="CmsAttr" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_attr
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attrName != null">attr_name,</if>
+            <if test="attrValue != null">attr_value,</if>
+            <if test="contentId != null">content_id,</if>
+            <if test="channelId != null">channel_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attrName != null">#{attrName},</if>
+            <if test="attrValue != null">#{attrValue},</if>
+            <if test="contentId != null">#{contentId},</if>
+            <if test="channelId != null">#{channelId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsAttr" parameterType="CmsAttr">
+        update cms_attr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="attrName != null">attr_name = #{attrName},</if>
+            <if test="attrValue != null">attr_value = #{attrValue},</if>
+            <if test="contentId != null">content_id = #{contentId},</if>
+            <if test="channelId != null">channel_id = #{channelId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsAttrById" parameterType="Long">
+        delete from cms_attr where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsAttrByIds" parameterType="String">
+        delete from cms_attr where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteCmsAttrByContentId" parameterType="Long">
+        delete from cms_attr where content_id = #{id}
+    </delete>
+    <delete id="deleteCmsAttrByChannelId" parameterType="Long">
+        delete from cms_attr where channel_id = #{id}
+    </delete>
+</mapper>

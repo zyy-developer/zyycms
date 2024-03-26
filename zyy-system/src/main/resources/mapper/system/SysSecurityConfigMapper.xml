@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.system.mapper.SysSecurityConfigMapper">
+
+    <resultMap type="SysSecurityConfig" id="SysSecurityConfigResult">
+        <result property="id"    column="id"    />
+        <result property="stage"    column="stage"    />
+        <result property="passwordLenMin"    column="password_len_min"    />
+        <result property="passwordLenMax"    column="password_len_max"    />
+        <result property="passwordRule"    column="password_rule"    />
+        <result property="passwordSensitive"    column="password_sensitive"    />
+        <result property="weakPasswords"    column="weak_passwords"    />
+        <result property="forceModifyPwdAfterAdd"    column="force_modify_pwd_after_add"    />
+        <result property="forceModifyPwdAfterReset"    column="force_modify_pwd_after_reset"    />
+        <result property="passwordExpireSeconds"    column="password_expire_seconds"    />
+        <result property="passwordRetryLimit"    column="password_retry_limit"    />
+        <result property="passwordRetryStrategy"    column="password_retry_strategy"    />
+        <result property="passwordRetryLockSeconds"    column="password_retry_lock_seconds"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysSecurityConfigVo">
+        select id, stage, password_len_min, password_len_max, password_rule, password_sensitive, weak_passwords, force_modify_pwd_after_add, force_modify_pwd_after_reset, password_expire_seconds, password_retry_limit, password_retry_strategy, password_retry_lock_seconds, create_by, create_time, update_by, update_time from sys_security_config
+    </sql>
+
+    <select id="selectSysSecurityConfigList" parameterType="SysSecurityConfig" resultMap="SysSecurityConfigResult">
+        <include refid="selectSysSecurityConfigVo"/>
+        <where>
+            <if test="stage != null  and stage != ''"> and stage = #{stage}</if>
+            <if test="passwordLenMin != null "> and password_len_min = #{passwordLenMin}</if>
+            <if test="passwordLenMax != null "> and password_len_max = #{passwordLenMax}</if>
+            <if test="passwordRule != null  and passwordRule != ''"> and password_rule = #{passwordRule}</if>
+            <if test="passwordSensitive != null  and passwordSensitive != ''"> and password_sensitive = #{passwordSensitive}</if>
+            <if test="weakPasswords != null  and weakPasswords != ''"> and weak_passwords = #{weakPasswords}</if>
+            <if test="forceModifyPwdAfterAdd != null  and forceModifyPwdAfterAdd != ''"> and force_modify_pwd_after_add = #{forceModifyPwdAfterAdd}</if>
+            <if test="forceModifyPwdAfterReset != null  and forceModifyPwdAfterReset != ''"> and force_modify_pwd_after_reset = #{forceModifyPwdAfterReset}</if>
+            <if test="passwordExpireSeconds != null "> and password_expire_seconds = #{passwordExpireSeconds}</if>
+            <if test="passwordRetryLimit != null "> and password_retry_limit = #{passwordRetryLimit}</if>
+            <if test="passwordRetryStrategy != null  and passwordRetryStrategy != ''"> and password_retry_strategy = #{passwordRetryStrategy}</if>
+            <if test="passwordRetryLockSeconds != null "> and password_retry_lock_seconds = #{passwordRetryLockSeconds}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSecurityConfigById" parameterType="Long" resultMap="SysSecurityConfigResult">
+        <include refid="selectSysSecurityConfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysSecurityConfig" parameterType="SysSecurityConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_security_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stage != null and stage != ''">stage,</if>
+            <if test="passwordLenMin != null">password_len_min,</if>
+            <if test="passwordLenMax != null">password_len_max,</if>
+            <if test="passwordRule != null and passwordRule != ''">password_rule,</if>
+            <if test="passwordSensitive != null">password_sensitive,</if>
+            <if test="weakPasswords != null">weak_passwords,</if>
+            <if test="forceModifyPwdAfterAdd != null and forceModifyPwdAfterAdd != ''">force_modify_pwd_after_add,</if>
+            <if test="forceModifyPwdAfterReset != null">force_modify_pwd_after_reset,</if>
+            <if test="passwordExpireSeconds != null">password_expire_seconds,</if>
+            <if test="passwordRetryLimit != null">password_retry_limit,</if>
+            <if test="passwordRetryStrategy != null and passwordRetryStrategy != ''">password_retry_strategy,</if>
+            <if test="passwordRetryLockSeconds != null">password_retry_lock_seconds,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stage != null and stage != ''">#{stage},</if>
+            <if test="passwordLenMin != null">#{passwordLenMin},</if>
+            <if test="passwordLenMax != null">#{passwordLenMax},</if>
+            <if test="passwordRule != null and passwordRule != ''">#{passwordRule},</if>
+            <if test="passwordSensitive != null">#{passwordSensitive},</if>
+            <if test="weakPasswords != null">#{weakPasswords},</if>
+            <if test="forceModifyPwdAfterAdd != null and forceModifyPwdAfterAdd != ''">#{forceModifyPwdAfterAdd},</if>
+            <if test="forceModifyPwdAfterReset != null">#{forceModifyPwdAfterReset},</if>
+            <if test="passwordExpireSeconds != null">#{passwordExpireSeconds},</if>
+            <if test="passwordRetryLimit != null">#{passwordRetryLimit},</if>
+            <if test="passwordRetryStrategy != null and passwordRetryStrategy != ''">#{passwordRetryStrategy},</if>
+            <if test="passwordRetryLockSeconds != null">#{passwordRetryLockSeconds},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysSecurityConfig" parameterType="SysSecurityConfig">
+        update sys_security_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stage != null and stage != ''">stage = #{stage},</if>
+            <if test="passwordLenMin != null">password_len_min = #{passwordLenMin},</if>
+            <if test="passwordLenMax != null">password_len_max = #{passwordLenMax},</if>
+            <if test="passwordRule != null and passwordRule != ''">password_rule = #{passwordRule},</if>
+            <if test="passwordSensitive != null">password_sensitive = #{passwordSensitive},</if>
+            <if test="weakPasswords != null">weak_passwords = #{weakPasswords},</if>
+            <if test="forceModifyPwdAfterAdd != null and forceModifyPwdAfterAdd != ''">force_modify_pwd_after_add = #{forceModifyPwdAfterAdd},</if>
+            <if test="forceModifyPwdAfterReset != null">force_modify_pwd_after_reset = #{forceModifyPwdAfterReset},</if>
+            <if test="passwordExpireSeconds != null">password_expire_seconds = #{passwordExpireSeconds},</if>
+            <if test="passwordRetryLimit != null">password_retry_limit = #{passwordRetryLimit},</if>
+            <if test="passwordRetryStrategy != null and passwordRetryStrategy != ''">password_retry_strategy = #{passwordRetryStrategy},</if>
+            <if test="passwordRetryLockSeconds != null">password_retry_lock_seconds = #{passwordRetryLockSeconds},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateSysSecurityStage">
+        update sys_security_config set stage = '1'
+    </update>
+
+    <delete id="deleteSysSecurityConfigById" parameterType="Long">
+        delete from sys_security_config where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSecurityConfigByIds" parameterType="String">
+        delete from sys_security_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectSysSecurityConfigByStage" resultMap="SysSecurityConfigResult">
+        <include refid="selectSysSecurityConfigVo"/>
+        where stage = '0' limit 1
+    </select>
+</mapper>

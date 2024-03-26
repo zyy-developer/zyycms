@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正易云CMS演示站</title>
+    <link rel="stylesheet" th:href="${ctx}+'/css/swiper-3.4.2.min.css'">
+    <link rel="stylesheet" th:href="${ctx}+'/css/index.css'">
+</head>
+<body>
+<th:block th:include="${res}+'/includes/header'" />
+
+<div class="content">
+<!--    轮播-->
+    <div class="carousel">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="no : ${cms.getContentList('channelId:1066,count:6,order:0,contentType:1004')}">
+                    <img th:src="${no.cover}" />
+                </div>
+            </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination"></div>
+
+            <!-- 如果需要滚动条 -->
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </div>
+    <div class="news">
+        <div class="news-content">
+            <div class="news-channel">
+                <div class="news-channel-list">
+                    <div class="channel-item active">
+                        <a href="#">新闻</a>
+                    </div>
+                    <!-- <div class="channel-item">
+                        <a href="#">财经</a>
+                    </div>
+                    <div class="channel-item">
+                        <a href="#">军事</a>
+                    </div>
+                    <div class="channel-item">
+                        <a href="#">文娱</a>
+                    </div>
+                    <div class="channel-item">
+                        <a href="#">法治</a>
+                    </div>
+                    <div class="channel-item">
+                        <a href="#">生活</a>
+                    </div>
+                    <div class="channel-item">
+                        <a href="#">汽车</a>
+                    </div> -->
+                </div>
+                <div class="right-btn">
+                    <a href="/xw.jhtml">更多 >></a>
+                </div>
+            </div>
+            <div class="news-list">
+                <div class="news-item" th:each="no: ${cms.getContentList('channelId:1066,count:10,order:2')}">
+                    <div class="news-cover" th:onclick="location.href='[(${no.url})]'">
+                        <img th:src="${no.cover}!=null?${no.cover}:${ctx}+'/img/index/cover-img.jpg'" />
+                    </div>
+                    <div class="news-details">
+                        <span th:onclick="location.href='[(${no.url})]'">[[${no.title}]]</span>
+                        <a>
+                            <span>[[${#dates.format(no.releaseTime, 'yyyy-MM-dd')}]]</span>
+                            <span class="views"><img th:src="${ctx}+'/img/index/eye.svg'" /><span>[[${no.views}]]</span></span>
+                        </a>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+<!--    视频-->
+    <div class="video">
+        <div class="video-content">
+            <div class="channel-title">
+                <span class="left-title">热门视频</span>
+                <div class="right-btn">
+                    <a href="/sp.jhtml">更多 >></a>
+                </div>
+            </div>
+            <div class="video-box">
+                <div class="video-one" th:each="no : ${cms.getContentList('channelId:1068,count:1,order:0')}">
+                    <div class="video-cover" th:onclick="location.href='[(${no.url})]'">
+                        <img th:src="${no.cover}">
+                    </div>
+                    <div class="video-title">
+                        <a th:href="${no.url}">[[${no.title}]]</a>
+                    </div>
+                </div>
+                <div class="video-list">
+                    <div class="video-item" th:each="no,i : ${cms.getContentList('channelId:1068,count:5,order:0')}" th:if="${i.index>0}">
+                        <div class="video-cover" th:onclick="location.href='[(${no.url})]'">
+                            <img th:src="${no.cover}">
+                        </div>
+                        <div class="video-title">
+                            <a th:href="${no.url}">[[${no.title}]]</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="${res}+'/includes/footer'" />
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/swiper-3.4.2.min.js'"></script>
+<script>
+
+    var swiper = new Swiper('.swiper-container', {
+        loop: true,
+        pagination: '.swiper-pagination',
+        paginationClickable: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        spaceBetween: 30,
+        autoplay: 5000,
+        effect: 'fade'
+    });
+
+
+    $(".channel-item").click(function () {
+        $(this).addClass("active")
+        $(this).siblings().removeClass("active")
+    })
+
+</script>
+</body>
+</html>

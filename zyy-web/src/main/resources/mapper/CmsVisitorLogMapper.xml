@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsVisitorLogMapper">
+
+    <resultMap type="CmsVisitorLog" id="CmsVisitorLogResult">
+        <result property="id"    column="id"    />
+        <result property="ip"    column="ip"    />
+        <result property="os"    column="os"    />
+        <result property="cookie" column="cookie" />
+        <result property="region" column="region" />
+        <result property="city" column="city"/>
+        <result property="siteId" column="site_id" />
+        <result property="pagePath" column="page_path" />
+        <result property="createTime" column="create_time"    />
+        <result property="contentId" column="content_id" />
+        <result property="channelId" column="channel_id" />
+    </resultMap>
+
+    <sql id="selectCmsVisitorLogVo">
+        select id, ip, os, cookie, region, city, site_id, page_path, create_time,content_id,channel_id from cms_visitor_log
+    </sql>
+
+    <select id="selectCmsVisitorLogList" parameterType="CmsVisitorLog" resultMap="CmsVisitorLogResult">
+        <include refid="selectCmsVisitorLogVo"/>
+        <where>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="os != null  and os != ''"> and os = #{os}</if>
+            <if test="cookie != null"> and cookie = #{cookie}</if>
+            <if test="siteId != null"> and site_id = #{siteId}</if>
+            <if test="pagePath != null and pagePath !=''"> and page_path like concat('%', #{pagePath}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCmsVisitorLogById" parameterType="Long" resultMap="CmsVisitorLogResult">
+        <include refid="selectCmsVisitorLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsVisitorLog" parameterType="CmsVisitorLog" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_visitor_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ip != null">ip,</if>
+            <if test="os != null">os,</if>
+            <if test="cookie != null">cookie,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="pagePath != null">page_path,</if>
+            <if test="region != null">region,</if>
+            <if test="city != null">city,</if>
+            <if test="contentId != null">content_id,</if>
+            <if test="channelId != null">channel_id,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ip != null">#{ip},</if>
+            <if test="os != null">#{os},</if>
+            <if test="cookie != null">#{cookie},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="pagePath != null">#{pagePath},</if>
+            <if test="region != null">#{region},</if>
+            <if test="city != null">#{city},</if>
+            <if test="contentId != null">#{contentId},</if>
+            <if test="channelId != null">#{channelId},</if>
+            now()
+         </trim>
+    </insert>
+
+    <update id="updateCmsVisitorLog" parameterType="CmsVisitorLog">
+        update cms_visitor_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="os != null">os = #{os},</if>
+            <if test="cookie != null">cookie = #{cookie},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="pagePath != null">page_path = #{pagePath},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="contentId != null"> content_id = #{contentId},</if>
+            <if test="channelId != null">channel_id = #{channelId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsVisitorLogById" parameterType="Long">
+        delete from cms_visitor_log where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsVisitorLogByIds" parameterType="String">
+        delete from cms_visitor_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectViewCountByDay" resultType="java.util.Map" parameterType="CmsVisitorLogVo">
+        SELECT TRIM(LEADING '0' FROM DATE_FORMAT( create_time, '%H' )) AS hour,COUNT(*) AS count FROM cms_visitor_log WHERE DATE_FORMAT( create_time, '%Y-%m-%d' ) =
+            DATE_FORMAT( #{date}, '%Y-%m-%d' ) AND site_id=#{siteId}  GROUP BY HOUR ORDER BY HOUR
+    </select>
+
+    <select id="selectViewUvByDay" resultType="java.util.Map" parameterType="CmsVisitorLogVo">
+        SELECT TRIM(LEADING '0' FROM b.HOUR) AS hour,COUNT(1) AS count FROM( SELECT DATE_FORMAT( create_time, '%H' ) AS HOUR,a.*
+            FROM cms_visitor_log a WHERE DATE_FORMAT(create_time,'%Y-%m-%d')=DATE_FORMAT(#{date},'%Y-%m-%d')
+            AND site_id=#{siteId} GROUP BY cookie) b GROUP BY b.HOUR
+    </select>
+
+    <select id="selectViewIpByDay" resultType="java.util.Map" parameterType="CmsVisitorLogVo">
+        SELECT TRIM(LEADING '0' FROM b.HOUR) AS hour,COUNT(1) AS count FROM( SELECT DATE_FORMAT( create_time, '%H' ) AS HOUR,a.*
+            FROM cms_visitor_log a WHERE DATE_FORMAT(create_time,'%Y-%m-%d')=DATE_FORMAT(#{date},'%Y-%m-%d')
+            AND site_id=#{siteId} GROUP BY ip) b GROUP BY b.HOUR
+    </select>
+
+    <select id="selectViewPvToday" resultType="java.lang.Integer" parameterType="CmsVisitorLogVo">
+        SELECT COUNT(1) FROM cms_visitor_log WHERE DATE_FORMAT(create_time,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') and site_id=#{siteId}
+    </select>
+
+    <select id="selectViewIpToday" resultType="java.lang.Integer" parameterType="CmsVisitorLogVo">
+        SELECT COUNT(1) FROM (SELECT * FROM cms_visitor_log a WHERE DATE_FORMAT(create_time,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')
+         AND site_id=#{siteId} GROUP BY ip) b
+    </select>
+
+    <select id="selectViewUvToday" resultType="java.lang.Integer" parameterType="CmsVisitorLogVo">
+        SELECT COUNT(1) FROM (SELECT * FROM cms_visitor_log a WHERE DATE_FORMAT(create_time,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')
+           AND site_id=#{siteId} GROUP BY cookie) b
+    </select>
+
+    <select id="selectByOldUserNum" resultType="java.lang.Integer" parameterType="CmsVisitorLogVo">
+        <if test="cookie == null">select count(1) from cms_visitor_log where cookie in(</if>select <if test="cookie == null">cookie</if>
+        <if test="cookie != null">count(DISTINCT cookie)</if> from cms_visitor_log where cookie in
+          (select cookie from cms_visitor_log where DATE(create_time) = DATE_FORMAT(NOW(),'%Y-%m-%d') GROUP BY cookie)
+          and DATE(create_time) &lt; DATE_FORMAT(NOW(),'%Y-%m-%d') <if test="cookie == null">)
+        and DATE(create_time) = DATE_FORMAT(NOW(),'%Y-%m-%d')</if> and site_id=#{siteId}
+    </select>
+
+    <select id="selectPageViewList" resultType="CmsPageViewVo" parameterType="CmsPageViewVo">
+        SELECT
+        a.page_path AS pageName,
+        COUNT(1) AS pvCount,
+        COUNT(DISTINCT a.cookie) AS uvCount
+        FROM
+        cms_visitor_log a
+        WHERE
+        DATE(a.create_time) BETWEEN #{startDate} AND #{endDate}
+        <if test="pageName !=null and pageName !=''"> and page_path like concat('%',#{pageName},'%')</if>
+        <if test="siteId !=null"> and site_id = #{siteId}</if>
+        GROUP BY
+        a.page_path
+        ORDER BY
+        pvCount DESC
+    </select>
+
+    <select id="selectRegionInfoList" resultType="java.util.Map" parameterType="CmsPageViewVo">
+        SELECT (CASE WHEN a.region IS NULL THEN '其他' ELSE a.region END) AS region,
+               COUNT(1) AS pv,
+               COUNT(DISTINCT a.cookie) AS uv
+        FROM
+            cms_visitor_log a
+        WHERE
+            DATE(a.create_time) BETWEEN #{startDate} AND #{endDate}
+        <if test="siteId !=null"> and site_id = #{siteId}</if>
+        GROUP BY
+            a.region
+        ORDER BY
+            pv DESC
+    </select>
+
+    <select id="selectCityInfoList" resultType="java.util.Map" parameterType="CmsPageViewVo">
+        SELECT (CASE WHEN a.city IS NULL THEN '其他' ELSE a.city END) AS city,
+               a.region,COUNT(1) AS pv,COUNT(DISTINCT a.cookie) AS uv
+        FROM
+            cms_visitor_log a
+        WHERE
+            DATE(a.create_time) BETWEEN #{startDate} AND #{endDate}
+        <if test="siteId !=null"> and site_id = #{siteId}</if>
+        GROUP BY
+            a.city
+        ORDER BY
+            pv DESC
+    </select>
+</mapper>

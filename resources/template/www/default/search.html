@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全站搜索</title>
+    		<!-- css include -->
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/materialize.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/icofont.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/owl.carousel.min.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/owl.theme.default.min.css'">
+
+		<!-- my css include -->
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/custom-menu.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/style.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/responsive.css'">
+        <link rel="stylesheet" th:href="${ctx}+'/css/jquery.page.css'" />
+    <style>
+        .content{
+            width: 1200px;
+            min-height: 700px;
+            height: auto;
+            margin: auto;
+            display: flex;
+        }
+        .channel-left{
+            width: 200px;
+            height: auto;
+        }
+        .content-right{
+            width: 1000px;
+            height: auto;
+        }
+        .search-box{
+            width: 100%;
+            height: 40px;
+        }
+        .search-box input[type='text']{
+            width: 600px;
+            height: 100%;
+        }
+        .search-box input[type='button']{
+            width: 100px;
+            height: 100%;
+        }
+        .news-list{
+            width: 100%;
+            height: auto;
+        }
+        .news-item{
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 20px 30px;
+            border: 1px solid #e3baff;
+        }
+        .news-title{
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            color: #000000;
+        }
+        .news-title:hover{
+            color: #C80000;
+        }
+        .news-desc{
+            width: 100%;
+            font-size: 14px;
+            color: #4b4949;
+        }
+        .cateogry-section{
+            margin-top: 100px;
+        }
+        body{
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="thetop"></div>
+		<!-- for back to top -->
+
+		<div class='backToTop'>
+			<a href="#" class='scroll'>
+				<span>T</span>
+				<span>O</span>
+				<span>P</span>
+				<span class="go-up">
+					<i class="icofont icofont-long-arrow-up"></i>
+				</span>
+			</a>
+		</div>
+		<!-- backToTop -->
+<th:block th:include="${res}+'/includes/header'" />
+<section id="cateogry-section" class="cateogry-section w100dt mb-30">
+			<div class="container">
+    <div class="content">
+        <div class="channel-left">
+
+        </div>
+        <div class="content-right">
+            <div class="search-box">
+                <input type="text" placeholder="请输入" id="searchText"/>
+                <input type="button" value="搜索" onclick="search()"/>
+            </div>
+            <div class="news-list">
+
+            </div>
+            <div id="kkpager"></div>
+        </div>
+    </div>
+            </div>
+</section>
+<th:block th:include="${res}+'/includes/footer'" />
+
+
+<!-- my custom js -->
+<script type="text/javascript" th:src="${ctx}+'/js/jquery-3.1.1.min.js'"></script>
+<script type="text/javascript" th:src="${ctx}+'/js/materialize.js'"></script>
+<script type="text/javascript" th:src="${ctx}+'/js/owl.carousel.min.js'"></script>
+
+<!-- my custom js -->
+<script type="text/javascript" th:src="${ctx}+'/js/custom.js'"></script>
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/jquery.page.js'"></script>
+<script>
+    function search(pageNo) {
+        var text=$("#searchText").val();
+        if(text!=null&&text!="") {
+            $(".news-list").html("");
+            var data={
+                text:text,
+                page:pageNo!=null?pageNo:1,
+                pageSize:4
+            }
+            $.post("/search/searchText", data, function (data) {
+                var list=data.list;
+                for (const item in list) {
+                    var html='<div class="news-item">\n' +
+                        '         <p class="news-title" onclick="openPage(\''+list[item].url+'\')">'+list[item].title+'</p>\n' +
+                        '         <p class="news-desc">'+list[item].descs+'</p>\n' +
+                        '      </div>';
+                    $(".news-list").append(html)
+                }
+
+                kkpager.generPageHtml({
+                    pno : data.page==null?1:data.page,
+                    //总页码
+                    total : data.pages,
+                    //总数据条数
+                    totalRecords : data.count,
+                    mode : 'click',//默认值是link，可选link或者click
+                    click : function(n){
+                        this.selectPage(n);
+                        search(n)
+                        return false;
+                    }
+                },{});
+                console.log(data)
+            })
+        }
+    }
+
+    function openPage(url){
+        window.open(url);
+    }
+
+</script>
+</body>
+</html>

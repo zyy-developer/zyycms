@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsLinkSortMapper">
+
+    <resultMap type="CmsLinkSort" id="CmsLinkSortResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="siteId" column="site_id" />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCmsLinkSortVo">
+        select id, name, type, site_id, create_time from cms_link_sort
+    </sql>
+
+    <select id="selectCmsLinkSortList" parameterType="CmsLinkSort" resultMap="CmsLinkSortResult">
+        <include refid="selectCmsLinkSortVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="siteId != null"> and site_id = #{siteId}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsLinkSortById" parameterType="Long" resultMap="CmsLinkSortResult">
+        <include refid="selectCmsLinkSortVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsLinkSort" parameterType="CmsLinkSort" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_link_sort
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsLinkSort" parameterType="CmsLinkSort">
+        update cms_link_sort
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsLinkSortById" parameterType="Long">
+        delete from cms_link_sort where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsLinkSortByIds" parameterType="String">
+        delete from cms_link_sort where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

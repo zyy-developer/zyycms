@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404错误</title>
+    <style>
+        .content{
+            width: 100%;
+            height: 700px;
+        }
+        .content img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <!-- css include -->
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/materialize.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/icofont.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/owl.carousel.min.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/owl.theme.default.min.css'">
+        <link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/custom-menu.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/style.css'">
+		<link rel="stylesheet" type="text/css" th:href="${ctx}+'/css/responsive.css'">
+</head>
+<body>
+    <th:block th:include="${res}+'/includes/header'" />
+    <div class="content">
+        <img th:src="${ctx}+'/img/404.png'">
+    </div>
+    <th:block th:include="${res}+'/includes/footer'" />
+</body>
+</html>

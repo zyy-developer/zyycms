@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsSiteSetupMapper">
+
+    <resultMap type="CmsSiteSetup" id="CmsSiteSetupResult">
+        <result property="siteId"    column="site_id"    />
+        <result property="siteStatic"    column="site_static"    />
+        <result property="siteFavicon"    column="site_favicon"    />
+        <result property="siteLogo"    column="site_logo"    />
+        <result property="siteGrayscale"    column="site_grayscale"    />
+        <result property="siteAdaption"    column="site_adaption"    />
+        <result property="siteStop"    column="site_stop"    />
+        <result property="siteHomePath"    column="site_home_path"    />
+        <result property="siteSeoTitle"    column="site_seo_title"    />
+        <result property="siteSeoDesc"    column="site_seo_desc"    />
+        <result property="siteSeoKeywords"    column="site_seo_keywords"    />
+        <result property="siteTempSchemePc" column="site_temp_scheme_pc" />
+        <result property="siteTempSchemeMobile" column="site_temp_scheme_mobile" />
+        <result property="siteTempStyle" column="site_temp_style" />
+    </resultMap>
+
+    <sql id="selectCmsSiteSetupVo">
+        select site_id, site_static, site_favicon, site_logo, site_grayscale, site_adaption, site_stop, site_home_path, site_seo_title, site_seo_desc,
+               site_seo_keywords,site_temp_scheme_pc,site_temp_scheme_mobile,site_temp_style from cms_site_setup
+    </sql>
+
+    <select id="selectCmsSiteSetupList" parameterType="CmsSiteSetup" resultMap="CmsSiteSetupResult">
+        <include refid="selectCmsSiteSetupVo"/>
+        <where>
+            <if test="siteId != null "> and site_id = #{siteId}</if>
+            <if test="siteStatic != null "> and site_static = #{siteStatic}</if>
+            <if test="siteFavicon != null  and siteFavicon != ''"> and site_favicon = #{siteFavicon}</if>
+            <if test="siteLogo != null  and siteLogo != ''"> and site_logo = #{siteLogo}</if>
+            <if test="siteGrayscale != null "> and site_grayscale = #{siteGrayscale}</if>
+            <if test="siteAdaption != null "> and site_adaption = #{siteAdaption}</if>
+            <if test="siteStop != null "> and site_stop = #{siteStop}</if>
+            <if test="siteHomePath != null  and siteHomePath != ''"> and site_home_path = #{siteHomePath}</if>
+            <if test="siteSeoTitle != null  and siteSeoTitle != ''"> and site_seo_title = #{siteSeoTitle}</if>
+            <if test="siteSeoDesc != null  and siteSeoDesc != ''"> and site_seo_desc = #{siteSeoDesc}</if>
+            <if test="siteSeoKeywords != null  and siteSeoKeywords != ''"> and site_seo_keywords = #{siteSeoKeywords}</if>
+            <if test="siteTempSchemePc !=null and siteTempSchemePc !=''"> and site_temp_scheme_pc = #{siteTempSchemePc}</if>
+            <if test="siteTempSchemeMobile !=null and siteTempSchemeMobile !=''"> and site_temp_scheme_mobile = #{siteTempSchemeMobile}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsSiteSetupBySiteId" parameterType="Long" resultMap="CmsSiteSetupResult">
+        <include refid="selectCmsSiteSetupVo"/>
+        where site_id = #{siteId}
+    </select>
+
+    <insert id="insertCmsSiteSetup" parameterType="CmsSiteSetup">
+        insert into cms_site_setup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="siteId != null">site_id,</if>
+            <if test="siteStatic != null">site_static,</if>
+            <if test="siteFavicon != null">site_favicon,</if>
+            <if test="siteLogo != null">site_logo,</if>
+            <if test="siteGrayscale != null">site_grayscale,</if>
+            <if test="siteAdaption != null">site_adaption,</if>
+            <if test="siteStop != null">site_stop,</if>
+            <if test="siteHomePath != null">site_home_path,</if>
+            <if test="siteSeoTitle != null">site_seo_title,</if>
+            <if test="siteSeoDesc != null">site_seo_desc,</if>
+            <if test="siteSeoKeywords != null">site_seo_keywords,</if>
+            <if test="siteTempSchemePc !=null">site_temp_scheme_pc,</if>
+            <if test="siteTempSchemeMobile !=null">site_temp_scheme_mobile,</if>
+            <if test="siteTempStyle !=null">site_temp_style,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="siteId != null">#{siteId},</if>
+            <if test="siteStatic != null">#{siteStatic},</if>
+            <if test="siteFavicon != null">#{siteFavicon},</if>
+            <if test="siteLogo != null">#{siteLogo},</if>
+            <if test="siteGrayscale != null">#{siteGrayscale},</if>
+            <if test="siteAdaption != null">#{siteAdaption},</if>
+            <if test="siteStop != null">#{siteStop},</if>
+            <if test="siteHomePath != null">#{siteHomePath},</if>
+            <if test="siteSeoTitle != null">#{siteSeoTitle},</if>
+            <if test="siteSeoDesc != null">#{siteSeoDesc},</if>
+            <if test="siteSeoKeywords != null">#{siteSeoKeywords},</if>
+            <if test="siteTempSchemePc !=null">#{siteTempSchemePc},</if>
+            <if test="siteTempSchemeMobile !=null">#{siteTempSchemeMobile},</if>
+            <if test="siteTempStyle !=null">#{siteTempStyle},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsSiteSetup" parameterType="CmsSiteSetup">
+        update cms_site_setup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="siteStatic != null">site_static = #{siteStatic},</if>
+            <if test="siteFavicon != null">site_favicon = #{siteFavicon},</if>
+            <if test="siteLogo != null">site_logo = #{siteLogo},</if>
+            <if test="siteGrayscale != null">site_grayscale = #{siteGrayscale},</if>
+            <if test="siteAdaption != null">site_adaption = #{siteAdaption},</if>
+            <if test="siteStop != null">site_stop = #{siteStop},</if>
+            <if test="siteHomePath != null">site_home_path = #{siteHomePath},</if>
+            <if test="siteSeoTitle != null">site_seo_title = #{siteSeoTitle},</if>
+            <if test="siteSeoDesc != null">site_seo_desc = #{siteSeoDesc},</if>
+            <if test="siteSeoKeywords != null">site_seo_keywords = #{siteSeoKeywords},</if>
+            <if test="siteTempSchemePc !=null">site_temp_scheme_pc = #{siteTempSchemePc},</if>
+            <if test="siteTempSchemeMobile !=null">site_temp_scheme_mobile = #{siteTempSchemeMobile},</if>
+            <if test="siteTempStyle !=null">site_temp_style = #{siteTempStyle},</if>
+        </trim>
+        where site_id = #{siteId}
+    </update>
+
+    <delete id="deleteCmsSiteSetupBySiteId" parameterType="Long">
+        delete from cms_site_setup where site_id = #{siteId}
+    </delete>
+
+    <delete id="deleteCmsSiteSetupBySiteIds" parameterType="String">
+        delete from cms_site_setup where site_id in
+        <foreach item="siteId" collection="array" open="(" separator="," close=")">
+            #{siteId}
+        </foreach>
+    </delete>
+</mapper>

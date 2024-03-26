@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="${ctx}+'/css/swiper-3.4.2.min.css'">
+    <link rel="stylesheet" th:href="${ctx}+'/css/download.css'">
+</head>
+<body>
+<th:block th:include="${res}+'/includes/header'" />
+<div class="content">
+    <div class="download-container">
+        <h2>下载中心</h2>
+        <div class="download-list">
+            <div class="download-item" th:each="no : ${cms.getContentList('channelId:' + channel.channelId + ',count:4,order:2')}">
+                <div class="download-left">
+                    <div class="download-left-box">
+                        <p>[[${no.title}]]</p>
+                        <p>[[${no.profile}]]</p>
+                    </div>
+                </div>
+                <div class="download-right" th:onclick="location.href='[(${no.attr['download'][0].url})]'">
+                    <img th:src="${ctx}+'/img/download/download.svg'">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="${res}+'/includes/footer'" />
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/swiper-3.4.2.min.js'"></script>
+<script>
+    
+</script>
+</body>
+</html>

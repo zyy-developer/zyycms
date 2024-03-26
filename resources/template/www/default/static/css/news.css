@@ -1,0 +1,92 @@
+#header{
+            height: 100px;
+        }
+        .content{
+            width: 100%;
+            height: auto;
+            padding: 100px 0;
+            background-color: #e2e2e2;
+        }
+        .video-container{
+            width: 1440px;
+            height: auto;
+            margin: auto;
+        }
+
+.news-list{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            &::after {
+                content: '';
+                flex: auto;
+            }
+        }
+        .news-item{
+            width: calc((100% - 160px) / 5);
+            height: 280px;
+            background-color: #FFFFFF;
+            margin-top: 30px;
+            margin-right: 40px;
+            border-radius: 4px;
+            box-shadow: 1px 2px 10px #33333329;
+            overflow: hidden;
+        }
+        .news-item:nth-of-type(5n+0){
+            margin-right: 0;
+        }
+        .news-cover{
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+        }
+        .news-cover img{
+            width: 100%;
+            height: 100%;
+            transform: scale(1.0);
+            object-position: center;
+            transition: 0.6s all;
+            cursor: pointer;
+        }
+        .news-cover img:hover{
+            transform: scale(1.1);
+        }
+        .news-details{
+            width: 100%;
+            height: 120px;
+            padding: 18px 20px;
+        }
+        .news-details>span{
+            display: block;
+            height: 50px;
+            font-size: 18px;
+            clear: right;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
+        }
+        .news-details a{
+            width: 100%;
+            font-size: 14px;
+            color: rgba(51, 51, 51, 0.60);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .news-details>span:hover{
+            color: #E23939;
+        }
+        .news-details a img{
+            filter: invert(1);
+            width: 22px;
+        }
+        .news-details .views{
+            display: flex;
+            align-items: center;
+        }

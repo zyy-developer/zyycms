@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsSensitiveMapper">
+
+    <resultMap type="CmsSensitive" id="CmsSensitiveResult">
+        <result property="id"    column="id"    />
+        <result property="sensitiveWord"    column="sensitive_word"    />
+        <result property="replaceWord"    column="replace_word"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectCmsSensitiveVo">
+        select id, sensitive_word, replace_word, create_by, create_time, update_by, update_time, state from cms_sensitive
+    </sql>
+
+    <select id="selectCmsSensitiveList" parameterType="CmsSensitive" resultMap="CmsSensitiveResult">
+        <include refid="selectCmsSensitiveVo"/>
+        <where>
+            <if test="sensitiveWord != null  and sensitiveWord != ''"> and sensitive_word = #{sensitiveWord}</if>
+            <if test="replaceWord != null  and replaceWord != ''"> and replace_word = #{replaceWord}</if>
+            <if test="state != null "> and state = #{state}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsSensitiveById" parameterType="Long" resultMap="CmsSensitiveResult">
+        <include refid="selectCmsSensitiveVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsSensitive" parameterType="CmsSensitive" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_sensitive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sensitiveWord != null">sensitive_word,</if>
+            <if test="replaceWord != null">replace_word,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sensitiveWord != null">#{sensitiveWord},</if>
+            <if test="replaceWord != null">#{replaceWord},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsSensitive" parameterType="CmsSensitive">
+        update cms_sensitive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sensitiveWord != null">sensitive_word = #{sensitiveWord},</if>
+            <if test="replaceWord != null">replace_word = #{replaceWord},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsSensitiveById" parameterType="Long">
+        delete from cms_sensitive where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsSensitiveByIds" parameterType="String">
+        delete from cms_sensitive where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertCmsSensitiveLog" parameterType="CmsSensitiveLog">
+        insert into cms_sensitive_log(sensitive_word,content_id,sensitive_id,create_by,create_time) values (#{sensitiveWord},#{contentId},#{sensitiveId},#{createBy},now())
+    </insert>
+</mapper>

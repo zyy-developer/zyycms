@@ -1,0 +1,97 @@
+#header{
+            height: 100px;
+        }
+        .content{
+            width: 100%;
+            height: auto;
+            padding: 100px 0;
+            background-color: #e2e2e2;
+        }
+        .video-container{
+            width: 1440px;
+            height: auto;
+            margin: auto;
+        }
+        .video-list{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .video-item{
+            width: 328px;
+            height: auto;
+            background-color: #FFFFFF;
+            margin-top: 30px;
+            margin-right: 42px;
+        }
+        .video-item:nth-child(n+4){
+            margin-right: 0px;
+        }
+        .video-img{
+            width: 100%;
+            height: 214px;
+            background-color: rgba(231, 231, 231, 1);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .video-img img{
+            width: 100%;
+            height: 100%;
+            transform: scale(1.0);
+            transition: 0.6s all;
+        }
+        .video-img:hover img{
+            transform: scale(1.1);
+        }
+        .video-img:after{
+            content: "";
+            display: block;
+            width: 50px;
+            height: 50px;
+            background: url("../img/index/video-play-btn.svg") 100% no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+            margin: -138px auto;
+            z-index: 10;
+            cursor: pointer;
+        }
+        .video-content{
+            width: 100%;
+            height: 123px;
+            background-color: #FFFFFF;
+            padding: 20px;
+
+        }
+        .video-content p:nth-child(1){
+            height: 50px;
+            font-size: 20px;
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
+        }
+        .video-content p:nth-child(1):hover{
+            color: rgba(226, 57, 57, 1);
+        }
+        .video-content p:nth-child(2){
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: rgba(51, 51, 51, 0.6);
+        }
+        .video-content .views{
+            display: flex;
+            align-items: center;
+        }
+        .video-content .views img{
+            filter: invert(1);
+            width: 22px;
+            margin-right: 4px;
+        }

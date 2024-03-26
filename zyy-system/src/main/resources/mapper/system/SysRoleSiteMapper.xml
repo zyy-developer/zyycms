@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.system.mapper.SysRoleSiteMapper">
+
+    <resultMap type="SysRoleSite" id="SysRoleSiteResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="siteId"    column="site_id"    />
+    </resultMap>
+
+    <sql id="selectSysRoleSiteVo">
+        select role_id, site_id from sys_role_site
+    </sql>
+
+    <select id="selectSysRoleSiteList" parameterType="SysRoleSite" resultMap="SysRoleSiteResult">
+        <include refid="selectSysRoleSiteVo"/>
+        <where>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="siteId != null "> and site_id = #{siteId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRoleSiteByRoleId" parameterType="Long" resultMap="SysRoleSiteResult">
+        <include refid="selectSysRoleSiteVo"/>
+        where role_id = #{roleId}
+    </select>
+
+    <insert id="insertSysRoleSite" parameterType="SysRoleSite">
+        insert into sys_role_site
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">role_id,</if>
+            <if test="siteId != null">site_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="siteId != null">#{siteId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRoleSite" parameterType="SysRoleSite">
+        update sys_role_site
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="siteId != null">site_id = #{siteId},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteSysRoleSiteByRoleId" parameterType="Long">
+        delete from sys_role_site where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteSysRoleSiteByRoleIds" parameterType="String">
+        delete from sys_role_site where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+</mapper>

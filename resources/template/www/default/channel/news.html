@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻</title>
+    <link rel="stylesheet" th:href="${ctx}+'/css/swiper-3.4.2.min.css'">
+    <link rel="stylesheet" th:href="${ctx}+'/css/news.css'">
+</head>
+<body>
+<th:block th:include="${res}+'/includes/header'" />
+<div class="content">
+    <div class="video-container">
+        <h2>全部新闻</h2>
+         <th:block th:with="p=${cms.getContentPage('channelId:' + channel.channelId + ',siteId:'+site.id+',pageNo:'+page+',count:10,order:2')}">
+        <div class="news-list">
+                <div class="news-item" th:each="no: ${p.rows}">
+                    <div class="news-cover" th:onclick="location.href='[(${no.url})]'">
+                        <img th:src="${no.cover}!=null?${no.cover}:${ctx}+'/img/index/cover-img.jpg'" />
+                    </div>
+                    <div class="news-details">
+                        <span th:onclick="location.href='[(${no.url})]'">[[${no.title}]]</span>
+                        <a>
+                            <span>[[${#dates.format(no.releaseTime, 'yyyy-MM-dd')}]]</span>
+                            <span class="views"><img th:src="${ctx}+'/img/index/eye.svg'" /><span>[[${no.views}]]</span></span>
+                        </a>
+                    </div>
+                </div>
+            
+            </div>
+            <th:block th:include="${res}+'/includes/page'" />
+        </th:block>
+    </div>
+</div>
+<th:block th:include="${res}+'/includes/footer'" />
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/swiper-3.4.2.min.js'"></script>
+
+</body>
+</html>

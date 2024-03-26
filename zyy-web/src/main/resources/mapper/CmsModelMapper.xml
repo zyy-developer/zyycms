@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsModelMapper">
+
+    <resultMap type="CmsModel" id="CmsModelResult">
+        <result property="modelId"    column="model_id"    />
+        <result property="modelName"    column="model_name"    />
+        <result property="modelCode"    column="model_code"    />
+        <result property="modelCodeAdmin"    column="model_code_admin"    />
+        <result property="modelType" column="model_type" />
+        <result property="stage" column="stage" />
+        <result property="isPublic" column="is_public" />
+        <result property="tempDefault" column="temp_default" />
+        <result property="tempMobile" column="temp_mobile" />
+        <result property="siteId" column="site_id" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCmsModelVo">
+        select model_id, model_name, model_code, site_id, model_code_admin, model_type, stage, is_public, temp_default, temp_mobile, create_by, create_time from cms_model
+    </sql>
+
+    <select id="selectCmsModelList" parameterType="CmsModel" resultMap="CmsModelResult">
+        <include refid="selectCmsModelVo"/>
+        <where>
+            <if test="modelName != null  and modelName != ''"> and model_name like concat('%', #{modelName}, '%')</if>
+            <if test="modelCode != null  and modelCode != ''"> and model_code = #{modelCode}</if>
+            <if test="modelCodeAdmin != null  and modelCodeAdmin != ''"> and model_code_admin = #{modelCodeAdmin}</if>
+            <if test="modelType != null and modelType !=''"> and model_type = #{modelType}</if>
+            <if test="siteId != null"> and (site_id = #{siteId} or is_public = #{isPublic}) </if>
+        </where>
+    </select>
+
+    <select id="selectCmsModelByModelId" parameterType="Long" resultMap="CmsModelResult">
+        <include refid="selectCmsModelVo"/>
+        where model_id = #{modelId}
+    </select>
+
+    <insert id="insertCmsModel" parameterType="CmsModel" useGeneratedKeys="true" keyProperty="modelId">
+        insert into cms_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelName != null">model_name,</if>
+            <if test="modelCode != null">model_code,</if>
+            <if test="modelCodeAdmin != null">model_code_admin,</if>
+            <if test="modelType != null">model_type,</if>
+            <if test="stage != null">stage,</if>
+            <if test="isPublic != null">is_public,</if>
+            <if test="tempDefault != null">temp_default,</if>
+            <if test="tempMobile != null">temp_mobile,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelName != null">#{modelName},</if>
+            <if test="modelCode != null">#{modelCode},</if>
+            <if test="modelCodeAdmin != null">#{modelCodeAdmin},</if>
+            <if test="modelType != null and modelType !=''">#{modelType},</if>
+            <if test="stage != null and stage !=''">#{stage},</if>
+            <if test="isPublic != null">#{isPublic},</if>
+            <if test="tempDefault != null">#{tempDefault},</if>
+            <if test="tempMobile != null">#{tempMobile},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsModel" parameterType="CmsModel">
+        update cms_model
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelName != null">model_name = #{modelName},</if>
+            <if test="modelCode != null">model_code = #{modelCode},</if>
+            <if test="modelCodeAdmin != null">model_code_admin = #{modelCodeAdmin},</if>
+            <if test="modelType != null and modelType !=''">model_type = #{modelType},</if>
+            <if test="stage != null and stage !=''">stage = #{stage},</if>
+            <if test="isPublic != null">is_public = #{isPublic},</if>
+            <if test="tempDefault != null">temp_default = #{tempDefault},</if>
+            <if test="tempMobile != null">temp_mobile = #{tempMobile},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+        </trim>
+        where model_id = #{modelId}
+    </update>
+
+    <delete id="deleteCmsModelByModelId" parameterType="Long">
+        delete from cms_model where model_id = #{modelId}
+    </delete>
+
+    <delete id="deleteCmsModelByModelIds" parameterType="String">
+        delete from cms_model where model_id in
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </delete>
+
+    <select id="selectCmsModelByModelIds" resultMap="CmsModelResult">
+        select model_id, model_name from cms_model where model_id in
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </select>
+</mapper>

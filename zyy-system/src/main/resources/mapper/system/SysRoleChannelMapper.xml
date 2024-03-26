@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.system.mapper.SysRoleChannelMapper">
+
+    <resultMap type="SysRoleChannel" id="SysRoleChannelResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="channelId"    column="channel_id"    />
+    </resultMap>
+
+    <sql id="selectSysRoleChannelVo">
+        select role_id, channel_id from sys_role_channel
+    </sql>
+
+    <select id="selectSysRoleChannelList" parameterType="SysRoleChannel" resultMap="SysRoleChannelResult">
+        <include refid="selectSysRoleChannelVo"/>
+        <where>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="channelId != null "> and channel_id = #{channelId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRoleChannelByRoleId" parameterType="Long" resultMap="SysRoleChannelResult">
+        <include refid="selectSysRoleChannelVo"/>
+        where role_id = #{roleId}
+    </select>
+
+    <insert id="insertSysRoleChannel" parameterType="SysRoleChannel">
+        insert into sys_role_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">role_id,</if>
+            <if test="channelId != null">channel_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="channelId != null">#{channelId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRoleChannel" parameterType="SysRoleChannel">
+        update sys_role_channel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelId != null">channel_id = #{channelId},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteSysRoleChannelByRoleId" parameterType="Long">
+        delete from sys_role_channel where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteSysRoleChannelByRoleIds" parameterType="String">
+        delete from sys_role_channel where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+</mapper>

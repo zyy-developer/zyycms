@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsSiteMapper">
+
+    <resultMap type="CmsSite" id="CmsSiteResult">
+        <result property="id"    column="id"    />
+        <result property="parentId" column="parent_id" />
+        <result property="name"    column="name"    />
+        <result property="directory"    column="directory"    />
+        <result property="domainName"    column="domain_name"    />
+        <result property="requestMethod" column="request_method" />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="url" column="url" />
+    </resultMap>
+
+    <sql id="selectCmsSiteVo">
+        SELECT id, NAME, parent_id, DIRECTORY, domain_name, request_method, create_by, create_time, update_by, update_time,CASE WHEN domain_name IS NULL OR domain_name=''
+         THEN CONCAT((SELECT concat(request_method,'://',domain_name) FROM cms_site WHERE parent_id=0),'/c/',DIRECTORY) ELSE concat(request_method,'://',domain_name) END AS url FROM cms_site
+    </sql>
+
+    <select id="selectCmsSiteList" parameterType="CmsSite" resultMap="CmsSiteResult">
+        <include refid="selectCmsSiteVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="directory != null  and directory != ''"> and directory = #{directory}</if>
+            <if test="parentId != null and parentId !=''"> and parent_id = #{parentId}</if>
+            <if test="domainName != null  and domainName != ''"> and domain_name like concat('%', #{domainName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCmsSiteListSet" parameterType="SysRoleCms" resultMap="CmsSiteResult">
+        <include refid="selectCmsSiteVo"/>
+        <where>
+            id in
+            <foreach item="item" collection="collection" open="(" separator="," close=")">
+                #{item.propertyId}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectCmsSiteById" parameterType="Long" resultMap="CmsSiteResult">
+        <include refid="selectCmsSiteVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectCmsSiteByDirectory" parameterType="String" resultMap="CmsSiteResult">
+        <include refid="selectCmsSiteVo"/>
+        where directory = #{directory}
+    </select>
+
+    <insert id="insertCmsSite" parameterType="CmsSite" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into cms_site
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="directory != null">directory,</if>
+            <if test="domainName != null">domain_name,</if>
+            <if test="requestMethod != null">request_method,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="directory != null">#{directory},</if>
+            <if test="domainName != null">#{domainName},</if>
+            <if test="requestMethod != null">#{requestMethod},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsSite" parameterType="CmsSite">
+        update cms_site
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="directory != null">directory = #{directory},</if>
+            <if test="domainName != null">domain_name = #{domainName},</if>
+            <if test="requestMethod != null">request_method = #{requestMethod},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsSiteById" parameterType="Long">
+        delete from cms_site where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsSiteByIds" parameterType="String">
+        delete from cms_site where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

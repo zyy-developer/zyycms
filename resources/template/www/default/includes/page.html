@@ -1,0 +1,31 @@
+<link rel="stylesheet" th:href="${ctx}+'/css/jquery.page.css'" />
+<script th:src="${ctx}+'/js/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/jquery.page.js'"></script>
+<div class="page-info">
+    <div id="kkpager"></div>
+</div>
+<script>
+    $(function () {
+        var latter=location.pathname.substring(location.pathname.lastIndexOf("."),location.pathname.length);
+        kkpager.generPageHtml({
+            pno : [[${page}]],
+            //总页码
+            total : [[${p.pages}]],
+            //总数据条数
+            totalRecords : [[${p.total}]],
+            //链接前部
+            hrefFormer: "[[${channel.url}]]",
+            //链接尾部
+            hrefLatter: latter,
+            isShowTotalPage: true,
+            getLink: function (n) {
+                var lastIndexOf=this.hrefFormer.lastIndexOf('.');
+                var former=this.hrefFormer.substring(0,lastIndexOf);
+                var latter=this.hrefFormer.substring(lastIndexOf);
+                return former+"_"+n+latter;
+            }
+        },{});
+
+        var totalPageNum=[[${p.pages}]];
+    })
+</script>    

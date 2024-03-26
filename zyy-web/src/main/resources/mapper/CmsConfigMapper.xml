@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsConfigMapper">
+
+    <resultMap type="CmsConfig" id="CmsConfigResult">
+        <result property="id"    column="id"    />
+        <result property="configKey"    column="config_key"    />
+        <result property="configValue"    column="config_value"    />
+        <result property="category"    column="category"    />
+        <result property="remark"    column="remark"    />
+        <result property="sort"    column="sort"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCmsConfigVo">
+        select id, config_key, config_value, category, remark, sort, delete_flag, create_by, create_time, update_by, update_time from cms_config
+    </sql>
+
+    <select id="selectCmsConfigList" parameterType="CmsConfig" resultMap="CmsConfigResult">
+        <include refid="selectCmsConfigVo"/>
+        <where>
+            <if test="configKey != null  and configKey != ''"> and config_key = #{configKey}</if>
+            <if test="configValue != null  and configValue != ''"> and config_value = #{configValue}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="deleteFlag != null "> and delete_flag = #{deleteFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsConfigById" parameterType="Long" resultMap="CmsConfigResult">
+        <include refid="selectCmsConfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsConfig" parameterType="CmsConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="configKey != null">config_key,</if>
+            <if test="configValue != null">config_value,</if>
+            <if test="category != null">category,</if>
+            <if test="remark != null">remark,</if>
+            <if test="sort != null">sort,</if>
+            <if test="deleteFlag != null">delete_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="configKey != null">#{configKey},</if>
+            <if test="configValue != null">#{configValue},</if>
+            <if test="category != null">#{category},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="deleteFlag != null">#{deleteFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsConfig" parameterType="CmsConfig">
+        update cms_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="configKey != null">config_key = #{configKey},</if>
+            <if test="configValue != null">config_value = #{configValue},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="deleteFlag != null">delete_flag = #{deleteFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateCmsConfigByConfigKey" parameterType="CmsConfig">
+        update cms_config set config_value = #{configValue} where config_key = #{configKey}
+    </update>
+
+    <delete id="deleteCmsConfigById" parameterType="Long">
+        delete from cms_config where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsConfigByIds" parameterType="String">
+        delete from cms_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

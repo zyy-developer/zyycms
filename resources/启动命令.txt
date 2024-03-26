@@ -1,0 +1,1 @@
+java -jar ruoyi-admin.jar --spring.config.location=file:/D:/zyycms/application.yml

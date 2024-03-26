@@ -1,0 +1,250 @@
+.carousel{
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+        .swiper-container {
+            width: 1440px;
+            height: 100%;
+            margin: auto;
+        }
+        .swiper-wrapper,
+        .swiper-slide{
+            width: 100%;
+            height: 100%;
+        }
+        .swiper-slide img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .content{
+            width: 100%;
+            height: auto;
+        }
+        .news{
+            width: 100%;
+            height: auto;
+            background-color: rgba(203, 198, 198, 0.1);
+            display: flex;
+            justify-content: center;
+            padding: 50px 0;
+        }
+        .news-content{
+            width: 1440px;
+            height: 100%;
+        }
+        .news-channel{
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .news-channel-list{
+            width: 90%;
+            height: 100%;
+            display: flex;
+        }
+        .channel-item{
+            width: auto;
+            margin-right: 64px;
+            display: flex;
+            align-items: flex-end;
+        }
+        .channel-item a{
+            font-size: 24px;
+            color: #333;
+            text-decoration: none;
+        }
+        .channel-item.active a{
+            /* color: #E23939; */
+            font-weight: 550;
+            font-size: 32px;
+        }
+        .right-btn a{
+            color: rgba(51, 51, 51, 0.60);
+        }
+        .news-list{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            &::after {
+                content: '';
+                flex: auto;
+            }
+        }
+        .news-item{
+            width: calc((100% - 160px) / 5);
+            height: 280px;
+            background-color: #FFFFFF;
+            margin-top: 30px;
+            margin-right: 40px;
+            border-radius: 4px;
+            box-shadow: 1px 2px 10px #33333329;
+            overflow: hidden;
+        }
+        .news-item:nth-of-type(5n+0){
+            margin-right: 0;
+        }
+        .news-cover{
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+        }
+        .news-cover img{
+            width: 100%;
+            height: 100%;
+            transform: scale(1.0);
+            object-position: center;
+            transition: 0.6s all;
+            cursor: pointer;
+        }
+        .news-cover img:hover{
+            transform: scale(1.1);
+        }
+        .news-details{
+            width: 100%;
+            height: 120px;
+            padding: 18px 20px;
+        }
+        .news-details>span{
+            display: block;
+            height: 50px;
+            font-size: 18px;
+            clear: right;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
+        }
+        .news-details a{
+            width: 100%;
+            font-size: 14px;
+            color: rgba(51, 51, 51, 0.60);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .news-details>span:hover{
+            color: #E23939;
+        }
+        .news-details a img{
+            filter: invert(1);
+            width: 22px;
+        }
+        .news-details .views{
+            display: flex;
+            align-items: center;
+        }
+        .video{
+            width: 100%;
+            height: auto;
+            padding: 50px 0;
+            display: flex;
+            justify-content: center;
+            background: url("../img/index/video-bg.jpg") 100% no-repeat;
+        }
+        .video-content{
+            width: 1440px;
+            height: auto;
+        }
+        .channel-title{
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .channel-title .left-title{
+            color: #333;
+            font-size: 32px;
+            font-weight: 550;
+        }
+        .video-box{
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .video-one{
+            width: 650px;
+            height: 400px;
+        }
+        .video-cover{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .video-cover img{
+            width: 100%;
+            height: 100%;
+            transform: scale(1.0);
+            transition: 0.6s all;
+        }
+        .video-cover:hover img{
+            transform: scale(1.1);
+        }
+        .video-title{
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(4px);
+            position: relative;
+            left: 0;
+            bottom: 60px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+        }
+        .video-title a{
+            color: #FFF;
+            font-size: 20px;
+        }
+        .video-one:after{
+            content: "";
+            display: block;
+            width: 90px;
+            height: 90px;
+            background: url("../img/index/video-play-btn.svg") 100% no-repeat;
+            position: relative;
+            margin: -300px auto;
+            z-index: 10;
+            cursor: pointer;
+        }
+        .video-list{
+            width: 700px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: space-between;
+        }
+        .video-item{
+            width: 333px;
+            height: 190px;
+        }
+        .video-item .video-title{
+            height: 35px;
+            bottom: 35px;
+        }
+        .video-item .video-title a{
+            font-size: 15px;
+        }
+        .video-item:after{
+            content: "";
+            display: block;
+            width: 50px;
+            height: 50px;
+            background: url("../img/index/video-play-btn.svg") 100% no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+            margin: -150px auto;
+            z-index: 10;
+            cursor: pointer;
+        }

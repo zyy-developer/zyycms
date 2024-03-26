@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.system.mapper.SysRoleCmsMapper">
+
+    <resultMap type="SysRoleCms" id="SysRoleCmsResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="propertyId"    column="property_id"    />
+        <result property="propertyType"    column="property_type"    />
+    </resultMap>
+
+    <sql id="selectSysRoleCmsVo">
+        select role_id, property_id, property_type from sys_role_cms
+    </sql>
+
+    <select id="selectSysRoleCmsList" parameterType="SysRoleCms" resultMap="SysRoleCmsResult">
+        <include refid="selectSysRoleCmsVo"/>
+        <where>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="propertyId != null "> and property_id = #{propertyId}</if>
+            <if test="propertyType != null  and propertyType != ''"> and property_type = #{propertyType}</if>
+        </where>
+    </select>
+
+    <select id="selectSysRoleCmsByRoleId" parameterType="Long" resultMap="SysRoleCmsResult">
+        <include refid="selectSysRoleCmsVo"/>
+        where role_id = #{roleId}
+    </select>
+
+    <insert id="insertSysRoleCms" parameterType="SysRoleCms">
+        insert into sys_role_cms
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">role_id,</if>
+            <if test="propertyId != null">property_id,</if>
+            <if test="propertyType != null and propertyType != ''">property_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="propertyId != null">#{propertyId},</if>
+            <if test="propertyType != null and propertyType != ''">#{propertyType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRoleCms" parameterType="SysRoleCms">
+        update sys_role_cms
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propertyId != null">property_id = #{propertyId},</if>
+            <if test="propertyType != null and propertyType != ''">property_type = #{propertyType},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteSysRoleCmsByRoleId" parameterType="Long">
+        delete from sys_role_cms where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteSysRoleCmsByRoleIds" parameterType="String">
+        delete from sys_role_cms where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <insert id="batchRoleByCms">
+        insert into sys_role_cms(role_id, property_id,property_type) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.roleId},#{item.propertyId},#{item.propertyType})
+        </foreach>
+    </insert>
+
+    <delete id="deleteSysRoleCmsByRoleIdAndType" parameterType="SysRoleCms">
+        delete from sys_role_cms where role_id = #{roleId} and property_type = #{propertyType}
+    </delete>
+</mapper>

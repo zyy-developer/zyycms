@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsChannelMapper">
+
+    <resultMap type="CmsChannel" id="CmsChannelResult">
+        <result property="channelId"    column="channel_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="path"    column="path"    />
+        <result property="externalLink"    column="external_link"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="tempId"    column="temp_id"    />
+        <result property="tempMobile" column="temp_mobile" />
+        <result property="siteId" column="site_id" />
+        <result property="contentModel" column="content_model"/>
+        <result property="channelModel" column="channel_model" />
+        <result property="stage"    column="stage"    />
+        <result property="modelName" column="model_name" />
+        <result property="examineTempId" column="examine_temp_id" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="isDelete" column="is_delete" />
+        <result property="deleteBy" column="delete_by" />
+        <result property="deleteTime" column="delete_time" />
+    </resultMap>
+
+    <sql id="selectCmsChannelVo">
+        SELECT a.channel_id,a.parent_id,a.order_num, a.channel_name,a.content_model,a.channel_model, a.temp_id,a.temp_mobile,
+               a.site_id, a.stage,a.path,a.external_link, b.model_name,a.examine_temp_id,a.create_by,a.create_time,a.update_by,a.update_time,a.is_delete,
+               a.delete_by,a.delete_time,CASE WHEN a.external_link IS NOT NULL AND a.external_link != '' THEN
+               a.external_link ELSE( CASE WHEN d.site_static = '0' THEN CONCAT('/html/',c.DIRECTORY,'/',a.path,'.html') ELSE ( CASE WHEN c.domain_name IS NULL
+               OR c.domain_name='' THEN CONCAT('/c/',c.DIRECTORY,'/',a.path,'.jhtml') ELSE CONCAT('/',a.path,'.jhtml')  END ) END ) END AS url FROM
+               cms_channel a LEFT JOIN cms_model b ON a.channel_model = b.model_id LEFT JOIN cms_site c ON a.site_id=c.id LEFT JOIN cms_site_setup d ON c.id=d.site_id
+    </sql>
+
+    <select id="selectCmsChannelList" parameterType="CmsChannel" resultMap="CmsChannelResult">
+        <include refid="selectCmsChannelVo"/>
+        <where>
+            <if test="parentId != null "> and a.parent_id = #{parentId}</if>
+            <if test="channelName != null  and channelName != ''"> and a.channel_name like concat('%', #{channelName}, '%')</if>
+            <if test="path != null  and path != ''"> and a.path = #{path}</if>
+            <if test="externalLink != null  and externalLink != ''"> and a.external_link = #{externalLink}</if>
+            <if test="orderNum != null "> and a.order_num = #{orderNum}</if>
+            <if test="tempId != null  and tempId != ''"> and a.temp_id = #{tempId}</if>
+            <if test="tempMobile != null  and tempMobile != ''"> and a.temp_mobile = #{tempMobile}</if>
+            <if test="siteId != null"> and a.site_id = #{siteId}</if>
+            <if test="contentModel != null"> and a.content_model = #{contentModel}</if>
+            <if test="channelModel != null"> and a.channel_model = #{channelModel}</if>
+            <if test="stage != null "> and a.stage = #{stage}</if>
+            <if test="isDelete != null"> and a.is_delete = #{isDelete}</if>
+            <if test="roleCmsList != null"> and a.channel_id IN
+                <foreach collection="roleCmsList" item="node" open="(" separator="," close=")">
+                    #{node.propertyId}
+                </foreach>
+            </if>
+        </where>
+        order by a.order_num
+    </select>
+
+    <select id="selectCmsChannelByChannelId" parameterType="Long" resultMap="CmsChannelResult">
+        <include refid="selectCmsChannelVo"/>
+        where a.channel_id = #{channelId}
+    </select>
+
+    <insert id="insertCmsChannel" parameterType="CmsChannel" useGeneratedKeys="true" keyProperty="channelId">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="channelId">
+            select last_insert_id() as channelId
+        </selectKey>
+        insert into cms_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">parent_id,</if>
+            <if test="channelName != null and channelName != ''">channel_name,</if>
+            <if test="path != null">path,</if>
+            <if test="externalLink != null">external_link,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="tempId != null">temp_id,</if>
+            <if test="tempMobile != null">temp_mobile,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="stage != null">stage,</if>
+            <if test="contentModel != null">content_model,</if>
+            <if test="channelModel != null">channel_model,</if>
+            <if test="examineTempId != null">examine_temp_id,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">#{parentId},</if>
+            <if test="channelName != null and channelName != ''">#{channelName},</if>
+            <if test="path != null">#{path},</if>
+            <if test="externalLink != null">#{externalLink},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="tempId != null">#{tempId},</if>
+            <if test="tempMobile != null">#{tempMobile},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="contentModel != null">#{contentModel},</if>
+            <if test="channelModel != null">#{channelModel},</if>
+            <if test="examineTempId != null">#{examineTempId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            now()
+         </trim>
+    </insert>
+
+    <update id="updateCmsChannel" parameterType="CmsChannel">
+        update cms_channel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="channelName != null and channelName != ''">channel_name = #{channelName},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="externalLink != null">external_link = #{externalLink},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="tempId != null">temp_id = #{tempId},</if>
+            <if test="tempMobile != null">temp_mobile = #{tempMobile},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="stage != null">stage = #{stage},</if>
+            <if test="contentModel != null">content_model = #{contentModel},</if>
+            <if test="channelModel != null">channel_model = #{channelModel},</if>
+            <if test="examineTempId != null">examine_temp_id = #{examineTempId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="deleteBy !=null">delete_by = #{deleteBy},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            update_time=now()
+        </trim>
+        where channel_id = #{channelId}
+    </update>
+
+    <delete id="deleteCmsChannelByChannelId" parameterType="Long">
+        delete from cms_channel where channel_id = #{channelId}
+    </delete>
+
+    <delete id="deleteCmsChannelByChannelIds" parameterType="String">
+        delete from cms_channel where channel_id in
+        <foreach item="channelId" collection="array" open="(" separator="," close=")">
+            #{channelId}
+        </foreach>
+    </delete>
+
+    <select id="selectParentChannelList" resultMap="CmsChannelResult" parameterType="Long">
+        SELECT t2.*,CASE WHEN t2.external_link IS NOT NULL AND t2.external_link != '' THEN
+                             t2.external_link ELSE( CASE WHEN t5.site_static = '0' THEN CONCAT('/html/',t4.DIRECTORY,'/',t2.path,'.html') ELSE ( CASE WHEN t4.domain_name IS NULL
+            OR t4.domain_name='' THEN CONCAT('/c/',t4.DIRECTORY,'/',t2.path,'.jhtml') ELSE CONCAT('/',t2.path,'.jhtml')  END ) END ) END AS url
+        FROM(
+                SELECT
+                    @r AS _id,
+                    (SELECT @r := parent_id FROM cms_channel WHERE channel_id = _id) AS parent_id,
+            @I := @I + 1 AS lvl
+        FROM
+            (SELECT @r :=#{channelId},@I := 0) vars,
+            cms_channel h
+            ) t1
+            JOIN cms_channel t2
+        ON t1._id = t2.channel_id
+            JOIN cms_model t3
+            ON t2.channel_model = t3.model_id
+            JOIN cms_site t4
+            ON t2.site_id=t4.id
+            JOIN cms_site_setup t5
+            ON t4.id=t5.site_id
+        ORDER BY channel_id
+    </select>
+
+    <select id="selectChannelByPath" parameterType="CmsChannel" resultMap="CmsChannelResult">
+        <include refid="selectCmsChannelVo"/>
+        where a.path=#{path} <if test="siteId != null">and a.site_id=#{siteId}</if>
+    </select>
+</mapper>

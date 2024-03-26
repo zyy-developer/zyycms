@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsTemplateMapper">
+
+    <resultMap type="CmsTemplate" id="CmsTemplateResult">
+        <result property="id"    column="id"    />
+        <result property="tempName"    column="temp_name"    />
+        <result property="tempText"    column="temp_text"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectCmsTemplateVo">
+        select id, temp_name, temp_text, create_date from cms_template
+    </sql>
+
+    <select id="selectCmsTemplateList" parameterType="CmsTemplate" resultMap="CmsTemplateResult">
+        <include refid="selectCmsTemplateVo"/>
+        <where>
+            <if test="tempName != null  and tempName != ''"> and temp_name like concat('%', #{tempName}, '%')</if>
+            <if test="tempText != null  and tempText != ''"> and temp_text = #{tempText}</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsTemplateById" parameterType="Long" resultMap="CmsTemplateResult">
+        <include refid="selectCmsTemplateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsTemplate" parameterType="CmsTemplate" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tempName != null">temp_name,</if>
+            <if test="tempText != null">temp_text,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tempName != null">#{tempName},</if>
+            <if test="tempText != null">#{tempText},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsTemplate" parameterType="CmsTemplate">
+        update cms_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tempName != null">temp_name = #{tempName},</if>
+            <if test="tempText != null">temp_text = #{tempText},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsTemplateById" parameterType="Long">
+        delete from cms_template where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsTemplateByIds" parameterType="String">
+        delete from cms_template where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

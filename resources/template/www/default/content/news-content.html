@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻演示站点</title>
+    <link rel="stylesheet" th:href="${ctx}+'/css/news-content.css'">
+</head>
+<body>
+<th:block th:include="${res}+'/includes/header'" />
+
+<div class="content">
+    <div class="video-container">
+        <p class="news-title">[[${content.title}]]</p>
+        <p class="create-date">发布时间： [[${#dates.format(content.releaseTime, 'yyyy-MM-dd')}]]</p>
+        <div class="content-text">
+            [(${content.text})]
+        </div>
+        <div class="other-news">
+            <p>上一篇：<span>“生命起点”的守护者-郑大三附院</span></p>
+            <p>下一篇：<span>“生命起点”的守护者-郑大三附院</span></p>
+        </div>
+    </div>
+</div>
+<th:block th:include="${res}+'/includes/footer'" />
+
+<script th:src="${ctx}+'/jquery.min.js'"></script>
+<script th:src="${ctx}+'/js/swiper-3.4.2.min.js'"></script>
+<script>
+    '[[${cms.addView(content.id)}]]'
+</script>
+</body>
+</html>

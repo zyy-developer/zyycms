@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsMessageTemplateMapper">
+
+    <resultMap type="CmsMessageTemplate" id="CmsMessageTemplateResult">
+        <result property="id"    column="id"    />
+        <result property="msgCode"    column="msg_code"    />
+        <result property="msgName"    column="msg_name"    />
+        <result property="msgDesc"    column="msg_desc"    />
+        <result property="siteId"    column="site_id"    />
+        <result property="mailOpen"    column="mail_open"    />
+        <result property="mailTitle"    column="mail_title"    />
+        <result property="mailText"    column="mail_text"    />
+        <result property="msgOpen"    column="msg_open"    />
+        <result property="msgTitle"    column="msg_title"    />
+        <result property="msgText"    column="msg_text"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCmsMessageTemplateVo">
+        select id, msg_code, msg_name, msg_desc, site_id, mail_open, mail_title, mail_text, msg_open, msg_title, msg_text, create_by, create_time, update_by, update_time from cms_message_template
+    </sql>
+
+    <select id="selectCmsMessageTemplateList" parameterType="CmsMessageTemplate" resultMap="CmsMessageTemplateResult">
+        <include refid="selectCmsMessageTemplateVo"/>
+        <where>
+            <if test="msgCode != null  and msgCode != ''"> and msg_code = #{msgCode}</if>
+            <if test="msgName != null  and msgName != ''"> and msg_name like concat('%', #{msgName}, '%')</if>
+            <if test="msgDesc != null  and msgDesc != ''"> and msg_desc = #{msgDesc}</if>
+            <if test="siteId != null "> and site_id = #{siteId}</if>
+            <if test="mailOpen != null  and mailOpen != ''"> and mail_open = #{mailOpen}</if>
+            <if test="mailTitle != null  and mailTitle != ''"> and mail_title = #{mailTitle}</if>
+            <if test="mailText != null  and mailText != ''"> and mail_text = #{mailText}</if>
+            <if test="msgOpen != null  and msgOpen != ''"> and msg_open = #{msgOpen}</if>
+            <if test="msgTitle != null  and msgTitle != ''"> and msg_title = #{msgTitle}</if>
+            <if test="msgText != null  and msgText != ''"> and msg_text = #{msgText}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsMessageTemplateById" parameterType="Long" resultMap="CmsMessageTemplateResult">
+        <include refid="selectCmsMessageTemplateVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectCmsTemplateByTempCode" parameterType="String" resultMap="CmsMessageTemplateResult">
+        <include refid="selectCmsMessageTemplateVo"/>
+        where msg_code = #{tempCode}
+    </select>
+
+    <insert id="insertCmsMessageTemplate" parameterType="CmsMessageTemplate" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_message_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgCode != null and msgCode != ''">msg_code,</if>
+            <if test="msgName != null and msgName != ''">msg_name,</if>
+            <if test="msgDesc != null">msg_desc,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="mailOpen != null">mail_open,</if>
+            <if test="mailTitle != null">mail_title,</if>
+            <if test="mailText != null">mail_text,</if>
+            <if test="msgOpen != null">msg_open,</if>
+            <if test="msgTitle != null">msg_title,</if>
+            <if test="msgText != null">msg_text,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgCode != null and msgCode != ''">#{msgCode},</if>
+            <if test="msgName != null and msgName != ''">#{msgName},</if>
+            <if test="msgDesc != null">#{msgDesc},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="mailOpen != null">#{mailOpen},</if>
+            <if test="mailTitle != null">#{mailTitle},</if>
+            <if test="mailText != null">#{mailText},</if>
+            <if test="msgOpen != null">#{msgOpen},</if>
+            <if test="msgTitle != null">#{msgTitle},</if>
+            <if test="msgText != null">#{msgText},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsMessageTemplate" parameterType="CmsMessageTemplate">
+        update cms_message_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="msgCode != null and msgCode != ''">msg_code = #{msgCode},</if>
+            <if test="msgName != null and msgName != ''">msg_name = #{msgName},</if>
+            <if test="msgDesc != null">msg_desc = #{msgDesc},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="mailOpen != null">mail_open = #{mailOpen},</if>
+            <if test="mailTitle != null">mail_title = #{mailTitle},</if>
+            <if test="mailText != null">mail_text = #{mailText},</if>
+            <if test="msgOpen != null">msg_open = #{msgOpen},</if>
+            <if test="msgTitle != null">msg_title = #{msgTitle},</if>
+            <if test="msgText != null">msg_text = #{msgText},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsMessageTemplateById" parameterType="Long">
+        delete from cms_message_template where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsMessageTemplateByIds" parameterType="String">
+        delete from cms_message_template where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

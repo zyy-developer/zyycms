@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsFilesMapper">
+    
+    <resultMap type="CmsFiles" id="CmsFilesResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="shareStatus"    column="share_status"    />
+        <result property="resourceSize"    column="resource_size"    />
+        <result property="resourceType"    column="resource_type"    />
+        <result property="resourceUrl"    column="resource_url"    />
+        <result property="resourceDimensions"    column="resource_dimensions"    />
+        <result property="resourceDate"    column="resource_date"    />
+        <result property="resourceAlias"    column="resource_alias"    />
+        <result property="uploadOssId"    column="upload_oss_id"    />
+        <result property="suffix"    column="suffix"    />
+        <result property="videoCoverId"    column="video_cover_id"    />
+        <result property="isDisplay"    column="is_display"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="isDelete"    column="is_delete"    />
+    </resultMap>
+
+    <sql id="selectCmsFilesVo">
+        select id, user_id, share_status, resource_size, resource_type, resource_url, resource_dimensions, resource_date, resource_alias, upload_oss_id, suffix, video_cover_id, is_display, create_by, create_time, is_delete from cms_files
+    </sql>
+
+    <select id="selectCmsFilesList" parameterType="CmsFiles" resultMap="CmsFilesResult">
+        <include refid="selectCmsFilesVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="shareStatus != null  and shareStatus != ''"> and share_status = #{shareStatus}</if>
+            <if test="resourceSize != null "> and resource_size = #{resourceSize}</if>
+            <if test="resourceType != null  and resourceType != ''"> and resource_type = #{resourceType}</if>
+            <if test="resourceUrl != null  and resourceUrl != ''"> and resource_url = #{resourceUrl}</if>
+            <if test="resourceDimensions != null  and resourceDimensions != ''"> and resource_dimensions = #{resourceDimensions}</if>
+            <if test="resourceDate != null "> and resource_date = #{resourceDate}</if>
+            <if test="resourceAlias != null  and resourceAlias != ''"> and resource_alias = #{resourceAlias}</if>
+            <if test="uploadOssId != null "> and upload_oss_id = #{uploadOssId}</if>
+            <if test="suffix != null  and suffix != ''"> and suffix = #{suffix}</if>
+            <if test="videoCoverId != null "> and video_cover_id = #{videoCoverId}</if>
+            <if test="isDisplay != null  and isDisplay != ''"> and is_display = #{isDisplay}</if>
+            <if test="isDelete != null  and isDelete != ''"> and is_delete = #{isDelete}</if>
+        </where>
+    </select>
+    
+    <select id="selectCmsFilesById" parameterType="Long" resultMap="CmsFilesResult">
+        <include refid="selectCmsFilesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCmsFiles" parameterType="CmsFiles">
+        insert into cms_files
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="shareStatus != null and shareStatus != ''">share_status,</if>
+            <if test="resourceSize != null">resource_size,</if>
+            <if test="resourceType != null">resource_type,</if>
+            <if test="resourceUrl != null">resource_url,</if>
+            <if test="resourceDimensions != null">resource_dimensions,</if>
+            <if test="resourceDate != null">resource_date,</if>
+            <if test="resourceAlias != null">resource_alias,</if>
+            <if test="uploadOssId != null">upload_oss_id,</if>
+            <if test="suffix != null">suffix,</if>
+            <if test="videoCoverId != null">video_cover_id,</if>
+            <if test="isDisplay != null">is_display,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="isDelete != null">is_delete,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="shareStatus != null and shareStatus != ''">#{shareStatus},</if>
+            <if test="resourceSize != null">#{resourceSize},</if>
+            <if test="resourceType != null">#{resourceType},</if>
+            <if test="resourceUrl != null">#{resourceUrl},</if>
+            <if test="resourceDimensions != null">#{resourceDimensions},</if>
+            <if test="resourceDate != null">#{resourceDate},</if>
+            <if test="resourceAlias != null">#{resourceAlias},</if>
+            <if test="uploadOssId != null">#{uploadOssId},</if>
+            <if test="suffix != null">#{suffix},</if>
+            <if test="videoCoverId != null">#{videoCoverId},</if>
+            <if test="isDisplay != null">#{isDisplay},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsFiles" parameterType="CmsFiles">
+        update cms_files
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="shareStatus != null and shareStatus != ''">share_status = #{shareStatus},</if>
+            <if test="resourceSize != null">resource_size = #{resourceSize},</if>
+            <if test="resourceType != null">resource_type = #{resourceType},</if>
+            <if test="resourceUrl != null">resource_url = #{resourceUrl},</if>
+            <if test="resourceDimensions != null">resource_dimensions = #{resourceDimensions},</if>
+            <if test="resourceDate != null">resource_date = #{resourceDate},</if>
+            <if test="resourceAlias != null">resource_alias = #{resourceAlias},</if>
+            <if test="uploadOssId != null">upload_oss_id = #{uploadOssId},</if>
+            <if test="suffix != null">suffix = #{suffix},</if>
+            <if test="videoCoverId != null">video_cover_id = #{videoCoverId},</if>
+            <if test="isDisplay != null">is_display = #{isDisplay},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsFilesById" parameterType="Long">
+        delete from cms_files where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsFilesByIds" parameterType="String">
+        delete from cms_files where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

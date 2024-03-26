@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsContentMapper">
+
+    <resultMap type="CmsContent" id="CmsContentResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="text"    column="text"    />
+        <result property="views"    column="views"    />
+        <result property="externalLink" column="external_link" />
+        <result property="cover" column="cover" />
+        <result property="topping" column="topping" />
+        <result property="channelName" column="channel_name" />
+        <result property="stage"    column="stage"    />
+        <result property="releaseTime"    column="release_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="url" column="url" />
+        <result property="siteId" column="site_id" />
+        <result property="author" column="author" />
+        <result property="source" column="source" />
+        <result property="profile" column="profile" />
+        <result property="orderNum" column="order_num" />
+        <result property="createBy" column="create_by" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="flowId" column="flow_id" />
+        <result property="contentType" column="content_type" />
+        <result property="isDelete" column="is_delete" />
+        <result property="deleteBy" column="delete_by" />
+        <result property="deleteTime" column="delete_time" />
+    </resultMap>
+
+    <resultMap type="CmsContentVo" id="CmsContentResultBySensitive">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="text"    column="text"    />
+        <result property="views"    column="views"    />
+        <result property="channelName" column="channel_name" />
+        <result property="stage"    column="stage"    />
+        <result property="releaseTime"    column="release_time"    />
+        <result property="siteId" column="site_id" />
+        <result property="id"    column="id"    />
+        <result property="sensitiveWord"    column="sensitive_word"    />
+        <result property="replaceWord"    column="replace_word"    />
+    </resultMap>
+
+    <sql id="selectCmsContentVo">
+        SELECT a.id, a.title,a.channel_id,model_id,a.create_time,a.content_type,a.cover,a.release_time,a.site_id,a.views,a.stage,a.author,a.source,
+               a.profile,a.order_num,a.create_by,a.update_by,a.update_time,a.flow_id,a.external_link,a.is_delete,a.delete_by,a.delete_time,a.topping,
+               b.channel_name, CASE WHEN a.external_link IS NOT NULL AND a.external_link != '' THEN a.external_link ELSE(CASE WHEN d.site_static = '0' THEN
+               CONCAT('/html/',c.DIRECTORY,'/',b.path,'/',a.id,'.html') ELSE
+              (CASE WHEN c.domain_name IS NULL OR c.domain_name='' THEN CONCAT('/c/',c.DIRECTORY,'/',b.path,'/',a.id,'.jhtml') ELSE
+              CONCAT('/',b.path,'/',a.id,'.jhtml')  END) END)END AS url FROM cms_content a LEFT JOIN
+               cms_channel b ON a.channel_id = b.channel_id LEFT JOIN cms_site c ON b.site_id=c.id LEFT JOIN cms_site_setup d ON c.id=d.site_id
+    </sql>
+
+    <select id="selectCmsContentList" parameterType="CmsContent" resultMap="CmsContentResult">
+        <include refid="selectCmsContentVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and a.title like concat('%', #{title}, '%')</if>
+            <if test="channelId != null ">
+               and a.channel_id in
+               (SELECT
+                channel_id
+                FROM
+                (
+                SELECT
+                t1.channel_id,t1.channel_name,t1.parent_id,
+                IF
+                ( FIND_IN_SET( parent_id, @pids ) > 0, @pids := CONCAT( @pids, ',', channel_id ), IF(t1.channel_id = #{channelId}, #{channelId}, -1) ) AS ischild
+                FROM
+                ( SELECT channel_id, parent_id,channel_name FROM cms_channel t) t1,
+                ( SELECT @pids := #{channelId} ) t2
+                ) t3
+                WHERE
+                ischild != -1)
+             </if>
+            <if test="modelId != null "> and a.model_id = #{modelId}</if>
+            <if test="views != null "> and a.views = #{views}</if>
+            <if test="stage != null "> and a.stage = #{stage}</if>
+            <if test="siteId != null"> and a.site_id = #{siteId}</if>
+            <if test="releaseTime != null "> and a.release_time = #{releaseTime}</if>
+            <if test="author != null "> and a.author = #{author}</if>
+            <if test="source != null "> and a.source = #{source}</if>
+            <if test="profile != null "> and a.profile = #{profile}</if>
+            <if test="orderNum != null "> and a.order_num = #{orderNum}</if>
+            <if test="createBy != null "> and a.create_by = #{createBy}</if>
+            <if test="updateBy != null "> and a.update_by = #{updateBy}</if>
+            <if test="isDelete != null"> and a.is_delete = #{isDelete}</if>
+            <if test="contentType != null"> and a.content_type like concat('%','id":'+#{contentType},'%')</if>
+            <if test="roleCmsList != null"> and a.channel_id IN
+                <foreach collection="roleCmsList" item="node" open="(" separator="," close=")">
+                    #{node.propertyId}
+                </foreach>
+            </if>
+        </where>
+        <if test="order == null or order == 0 "> order by a.topping desc,a.order_num asc </if>
+        <if test="order !=null and order == 1 "> order by a.topping desc,a.release_time asc </if>
+        <if test="order !=null and order == 2 "> order by a.topping desc,a.release_time desc </if>
+        <if test="order !=null and order == 3 "> order by a.topping desc,a.views asc </if>
+        <if test="order !=null and order == 4 "> order by a.topping desc,a.views desc </if>
+        <if test="order !=null and order == 5 "> order by a.topping desc,a.create_time asc </if>
+        <if test="order !=null and order == 6 "> order by a.topping desc,a.create_time desc </if>
+        <if test="count !=null "> limit #{count} </if>
+    </select>
+
+    <select id="selectCmsContentById" parameterType="Long" resultMap="CmsContentResult">
+        <include refid="selectCmsContentVo"/>
+        where a.id = #{id}
+    </select>
+
+    <!--上一页/下一页-->
+    <select id="selectCmsContentByContent" parameterType="CmsContent" resultMap="CmsContentResult">
+        <include refid="selectCmsContentVo"/>
+        WHERE
+        a.stage='0' and a.is_delete='0' and a.channel_id=(SELECT channel_id FROM cms_content WHERE id=#{id}) and
+        <if test="order != null and order==0">
+            a.release_time  >
+            (SELECT
+            a.release_time
+            FROM cms_content WHERE a.id=#{id}) ORDER BY
+            a.release_time
+            LIMIT 1
+        </if>
+        <if test="order !=null and order == 1 ">
+            a.release_time  &lt; (SELECT release_time FROM cms_content WHERE id=#{id}) ORDER BY a.release_time DESC LIMIT 1
+        </if>
+        <if test="order !=null and order == 2 ">
+            a.release_time  > (SELECT release_time FROM cms_content WHERE id=#{id}) ORDER BY a.release_time LIMIT 1
+        </if>
+    </select>
+
+    <insert id="insertCmsContent" parameterType="CmsContent" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into cms_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="channelId != null">channel_id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="views != null">views,</if>
+            <if test="stage != null">stage,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="releaseTime != null">release_time,</if>
+            <if test="author !=null">author,</if>
+            <if test="source !=null">source,</if>
+            <if test="profile !=null">profile,</if>
+            <if test="externalLink != null">external_link,</if>
+            <if test="cover != null">cover,</if>
+            <if test="orderNum !=null">order_num,</if>
+            <if test="createBy !=null">create_by,</if>
+            <if test="flowId !=null">flow_id,</if>
+            <if test="contentType != null">content_type,</if>
+            <if test="isDelete != null">is_delete,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="channelId != null">#{channelId},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="views != null">#{views},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="releaseTime != null">#{releaseTime},</if>
+            <if test="author !=null">#{author},</if>
+            <if test="source !=null">#{source},</if>
+            <if test="profile !=null">#{profile},</if>
+            <if test="externalLink != null">#{externalLink},</if>
+            <if test="cover != null">#{cover},</if>
+            <if test="orderNum !=null">#{orderNum},</if>
+            <if test="createBy !=null">#{createBy},</if>
+            <if test="flowId !=null">#{flowId},</if>
+            <if test="contentType != null">#{contentType},</if>
+            <if test="isDelete != null">#{isDelete}</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateCmsContent" parameterType="CmsContent">
+        update cms_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="channelId != null">channel_id = #{channelId},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="stage != null">stage = #{stage},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="profile != null">profile = #{profile},</if>
+            <if test="externalLink != null">external_link = #{externalLink},</if>
+            <if test="cover != null">cover = #{cover},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="flowId !=null">flow_id = #{flowId},</if>
+            <if test="contentType != null">content_type = #{contentType},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="deleteBy !=null">delete_by = #{deleteBy},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="topping != null">topping = #{topping},</if>
+            update_time=now()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="addViews" parameterType="CmsContent">
+        update cms_content set views = views + #{views} where id = #{id}
+    </update>
+
+    <delete id="deleteCmsContentById" parameterType="Long">
+        delete from cms_content where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsContentByIds" parameterType="String">
+        delete from cms_content where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCmsContentVoByContentId" parameterType="Long" resultMap="CmsContentResultBySensitive">
+        select a.id, a.title,a.channel_id,model_id,a.create_time,a.release_time,a.site_id,b.id,b.sensitive_word,b.replace_word FROM cms_content a,cms_sensitive b,cms_content_txt c
+        WHERE a.id=c.content_id and c.text LIKE CONCAT('%',b.`sensitive_word`,'%') AND a.`id`= #{id} AND b.state='Y' and a.is_delete='0'
+    </select>
+
+    <update id="updateCmsContentVoByContentId" parameterType="CmsContentVo">
+        UPDATE cms_content_txt SET text = REPLACE(text,#{sensitiveWord},#{replaceWord}) where content_id=#{id}
+    </update>
+
+    <select id="selectTodayInsertNums" parameterType="CmsContent" resultType="Integer">
+        SELECT COUNT(1) FROM cms_content WHERE DATE_FORMAT(create_time, '%Y-%m-%d')= DATE_FORMAT(NOW(), '%Y-%m-%d')
+        <if test="siteId != null">and site_id = #{siteId}</if>
+    </select>
+
+    <select id="selectCmsContentByFlowId" parameterType="String" resultMap="CmsContentResult">
+        <include refid="selectCmsContentVo"/>
+        where flow_id = #{flowId}
+    </select>
+
+    <select id="selectCmsContentMaxNum" parameterType="CmsContent" resultType="Integer">
+        select MAX(order_num) from cms_content where channel_id = #{channelId}
+    </select>
+</mapper>

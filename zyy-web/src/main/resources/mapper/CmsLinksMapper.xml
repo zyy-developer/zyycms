@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsLinksMapper">
+
+    <resultMap type="CmsLinks" id="CmsLinksResult">
+        <result property="id"    column="id"    />
+        <result property="linkName"    column="link_name"    />
+        <result property="linkSrc"    column="link_src"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="siteId"    column="site_id"    />
+        <result property="linkSortId"    column="link_sort_id"    />
+    </resultMap>
+
+    <sql id="selectCmsLinksVo">
+        select id, link_name, link_src, link_url, create_time, site_id, link_sort_id from cms_links
+    </sql>
+
+    <select id="selectCmsLinksList" parameterType="CmsLinks" resultMap="CmsLinksResult">
+        <include refid="selectCmsLinksVo"/>
+        <where>
+            <if test="linkName != null  and linkName != ''"> and link_name like concat('%', #{linkName}, '%')</if>
+            <if test="linkSrc != null  and linkSrc != ''"> and link_src = #{linkSrc}</if>
+            <if test="linkUrl != null  and linkUrl != ''"> and link_url = #{linkUrl}</if>
+            <if test="siteId != null "> and site_id = #{siteId}</if>
+            <if test="linkSortId != null "> and link_sort_id = #{linkSortId}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsLinksById" parameterType="Long" resultMap="CmsLinksResult">
+        <include refid="selectCmsLinksVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsLinks" parameterType="CmsLinks" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_links
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="linkName != null">link_name,</if>
+            <if test="linkSrc != null">link_src,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="siteId != null">site_id,</if>
+            <if test="linkSortId != null">link_sort_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="linkName != null">#{linkName},</if>
+            <if test="linkSrc != null">#{linkSrc},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="siteId != null">#{siteId},</if>
+            <if test="linkSortId != null">#{linkSortId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsLinks" parameterType="CmsLinks">
+        update cms_links
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="linkName != null">link_name = #{linkName},</if>
+            <if test="linkSrc != null">link_src = #{linkSrc},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="siteId != null">site_id = #{siteId},</if>
+            <if test="linkSortId != null">link_sort_id = #{linkSortId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsLinksById" parameterType="Long">
+        delete from cms_links where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsLinksByIds" parameterType="String">
+        delete from cms_links where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

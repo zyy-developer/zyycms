@@ -1,0 +1,133 @@
+#kkpager{
+    clear:both;
+    color:#999;
+    padding:5px 0px 5px 0px;
+    font-size:13px;
+    margin:auto;
+    width: fit-content;
+    margin-top: 70px;
+    padding-bottom: 50px;
+}
+#kkpager a{
+    float: left;
+    border: 1px solid #ccc;
+    display: inline;
+    padding: 9px 13px 9px 13px;
+    margin-right: 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    cursor: pointer;
+    background: #FFFFFF;
+    text-decoration:none;
+    color: #4F4F4F;
+}
+
+#kkpager span.disabled{
+    float: left;
+    display: inline;
+    padding: 9px 13px 9px 13px;
+    margin-right: 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border:1px solid #DFDFDF;
+    background-color:#FFF;
+    color:#DFDFDF;
+}
+#kkpager span.curr{
+    float: left;
+    border: 1px solid #ccc;
+    display: inline;
+    padding: 9px 13px 9px 13px;
+    margin-right: 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: #C80000;
+    color: #fff;
+}
+#kkpager a:hover{
+    border:1px solid #ccc;
+    background-color: #C80000;
+    color:#fff;
+}
+#kkpager span.normalsize{
+}
+#kkpager_gopage_wrap{
+    position:relative;
+    left:0px;
+    top:0px;
+}
+#kkpager_btn_go {
+    width:44px;
+    height:24px;
+    border:0px;
+    overflow:hidden;
+    line-height:140%;
+    padding:0px;
+    margin:0px;
+    text-align:center;
+    cursor:pointer;
+    background-color:#4f88e1;
+    color:#FFF;
+    position:absolute;
+    left:0px;
+    *top:2px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    display:none;
+}
+#kkpager_btn_go_input{
+    width:36px;
+    height:21px;
+    color:#999;
+    text-align:center;
+    margin-left:1px;
+    margin-right:1px;
+    border:1px solid #DFDFDF;
+    position:relative;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    left:0px;
+    top:0px;
+    *top:2px;
+    outline:none;
+}
+
+#kkpager_btn_go_input.focus{
+    border-color:#4f88e1;
+}
+
+#kkpager .pageBtnWrap{
+    float:left;
+    left: 0px;
+    position: relative;
+}
+
+#kkpager .infoTextAndGoPageBtnWrap{
+    float:right;
+    right: 0px;
+    position: relative;
+    display: none;
+}
+#kkpager .spanDot{
+    float:left;
+    margin-right:5px;
+}
+
+#kkpager .currPageNum{
+    color:#178ccb;
+}
+
+#kkpager .infoTextAndGoPageBtnWrap{
+    padding-top:2px;
+    font-size: 15px;
+}
+
+@media (max-width: 1200px) {
+    #kkpager>div{
+        display: flex;
+        flex-direction: column;
+    }
+}

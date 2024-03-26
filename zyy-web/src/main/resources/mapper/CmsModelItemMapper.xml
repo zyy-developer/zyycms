@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyy.web.mapper.CmsModelItemMapper">
+
+    <resultMap type="CmsModelItem" id="CmsModelItemResult">
+        <result property="id"    column="id"    />
+        <result property="labelName"    column="label_name"    />
+        <result property="attrType"    column="attr_type"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="placeHolder"    column="place_holder"    />
+        <result property="field"    column="field"    />
+        <result property="sortNum"    column="sort_num"    />
+        <result property="content"    column="content"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCmsModelItemVo">
+        select id, label_name, attr_type, model_id, place_holder, field, sort_num, content, create_by, create_time, update_by, update_time from cms_model_item
+    </sql>
+
+    <select id="selectCmsModelItemList" parameterType="CmsModelItem" resultMap="CmsModelItemResult">
+        <include refid="selectCmsModelItemVo"/>
+        <where>
+            <if test="labelName != null  and labelName != ''"> and label_name like concat('%', #{labelName}, '%')</if>
+            <if test="attrType != null  and attrType != ''"> and attr_type = #{attrType}</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="placeHolder != null  and placeHolder != ''"> and place_holder = #{placeHolder}</if>
+            <if test="field != null  and field != ''"> and field = #{field}</if>
+            <if test="sortNum != null "> and sort_num = #{sortNum}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+
+    <select id="selectCmsModelItemById" parameterType="Long" resultMap="CmsModelItemResult">
+        <include refid="selectCmsModelItemVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCmsModelItem" parameterType="CmsModelItem" useGeneratedKeys="true" keyProperty="id">
+        insert into cms_model_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">label_name,</if>
+            <if test="attrType != null and attrType != ''">attr_type,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="placeHolder != null">place_holder,</if>
+            <if test="field != null">field,</if>
+            <if test="sortNum != null">sort_num,</if>
+            <if test="content != null">content,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">#{labelName},</if>
+            <if test="attrType != null and attrType != ''">#{attrType},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="placeHolder != null">#{placeHolder},</if>
+            <if test="field != null">#{field},</if>
+            <if test="sortNum != null">#{sortNum},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCmsModelItem" parameterType="CmsModelItem">
+        update cms_model_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="labelName != null and labelName != ''">label_name = #{labelName},</if>
+            <if test="attrType != null and attrType != ''">attr_type = #{attrType},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="placeHolder != null">place_holder = #{placeHolder},</if>
+            <if test="field != null">field = #{field},</if>
+            <if test="sortNum != null">sort_num = #{sortNum},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCmsModelItemById" parameterType="Long">
+        delete from cms_model_item where id = #{id}
+    </delete>
+
+    <delete id="deleteCmsModelItemByIds" parameterType="String">
+        delete from cms_model_item where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
